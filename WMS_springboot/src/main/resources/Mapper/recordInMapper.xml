@@ -1,0 +1,10 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wms_springboot.dao.RecordInDao">
+    <!--findAll-->
+    <select id="findAllRecordIn" resultType="com.example.wms_springboot.entity.deposityRecord">
+--         select record_id,pname,deposity_id,quantity, price,state,applicant_id,apply_remark,apply_time,
+--                review_id,review_remark,review_time,from deposity_record;
+           select *  from deposityRecord where `type`=0;
+    </select>
+</mapper>
