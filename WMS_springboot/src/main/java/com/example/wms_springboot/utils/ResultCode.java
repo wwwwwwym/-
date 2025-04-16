@@ -7,7 +7,7 @@ public enum ResultCode {
     SUCCESS("0","成功"),
     ERROR("-1","失败"),
     PARAM_ERROR("1001","参数异常"),
-    USER_EXIST_ERROR("2001","用户名已存在"),
+    USER_EXIST_ERROR("2001","用户已存在"),
     USER_ACCOUNT_ERROE("2002","账号或密码错误"),
     USER_NOT_EXITS_ERROR("2003","用户不存在"),
     PARAM_LOST("2004","参数缺失"),

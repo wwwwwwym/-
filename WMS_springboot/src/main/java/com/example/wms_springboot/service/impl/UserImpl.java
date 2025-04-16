@@ -25,9 +25,9 @@ public class UserImpl implements IUserService {
     @Override
     public User userRegister(User user) {
         //用户名校验
-        String userName = user.getUsername();
+        Integer userId = user.getUserid();
 
-        User dbUser = userDao.findByName(userName);
+        User dbUser = userDao.findById(userId);
         if(ObjectUtil.isNotEmpty(dbUser))//用户名已存在抛出异常
         {
             throw new CustomException(ResultCode.USER_EXIST_ERROR);
@@ -36,8 +36,26 @@ public class UserImpl implements IUserService {
             userDao.insertData(user);
 
         }
-
-
         return user;
     }
+
+    @Override
+    public User userLogin(User user) {
+        //用户校验,密码账号对应
+        Integer userid = user.getUserid();
+        String password = user.getPassword();
+        User dbUser = userDao.findById(userid);
+        String dbPassword = userDao.findPasswordById(userid);
+        if(ObjectUtil.isEmpty(dbUser))//用户不存在抛出异常
+        {
+            throw new CustomException(ResultCode.USER_NOT_EXITS_ERROR);
+        }
+        else if(ObjectUtil.notEqual(password,dbPassword))
+        {//账号或密码错误
+            throw new CustomException(ResultCode.USER_ACCOUNT_ERROE);
+        }
+        return user;
+    }
+
+
 }

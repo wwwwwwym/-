@@ -15,9 +15,15 @@ public interface UserDao {
 
     List<User> findAllUser();
 
-    @Select("select * from user where username=#{userName}")
-    User findByName(@Param("userName") String userName);//把这行的name传给上一行
+    @Select("select * from user where username=#{username}")
+    User findByName(@Param("username") String username);//把这行的name传给上一行
 
-    @Insert("insert into users(username,password,time) values (#{username},#{password},CURRENT_TIMESTAMP)")
-    User insertData(User user);
+    @Select("select * from user where userid=#{userid}")
+    User findById(@Param("userid") Integer userid);//把这行的name传给上一行
+
+    @Select("select password from user where userid=#{userid}")
+    String findPasswordById(@Param("userid") Integer userid);//把这行的name传给上一行
+
+    @Insert("insert into user(userid,username,password,time) values (#{userid},#{username},#{password},CURRENT_TIMESTAMP)")
+    Integer insertData(User user);
 }

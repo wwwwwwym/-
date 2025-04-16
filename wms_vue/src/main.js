@@ -15,10 +15,10 @@ Vue.use(ElementUI)
 import router from '@/router/router'
 
 
-//引入animate.css
-import animated from "animate.css"
-//Vue使用动画库
-Vue.use(animated);
+// //引入animate.css
+// import animated from "animate.css"
+// //Vue使用动画库
+// Vue.use(animated);
 
 
 //导入axios
@@ -27,11 +27,12 @@ import axios from 'axios'
 Vue.prototype.$http = axios
 
 
-//导入vue_resource
-import VueResource from 'vue-resource'
-//vue使用vue_resource插件
-Vue.use(VueResource);
-
+// //导入vue_resource
+// import VueResource from 'vue-resource'
+// //vue使用vue_resource插件
+// Vue.use(VueResource);
+import request from '@/request/request';
+Vue.prototype.$request=request
 
 new Vue({
   router,//挂载路由

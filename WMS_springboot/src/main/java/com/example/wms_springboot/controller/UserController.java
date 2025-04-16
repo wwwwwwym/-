@@ -28,6 +28,11 @@ public class UserController {
         return ResponseResult.success(userService.userRegister(user));
     }
 
+    @PostMapping("/login")
+    public ResponseResult userLogin(@RequestBody User user)
+    {
+        return ResponseResult.success(userService.userLogin(user));
+    }
 
 
 }

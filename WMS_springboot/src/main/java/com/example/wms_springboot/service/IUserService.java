@@ -8,4 +8,5 @@ public interface IUserService {
     List<User> findAllUser();
 
     User userRegister(User user);
+    User userLogin(User user);
 }

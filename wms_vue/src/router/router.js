@@ -3,8 +3,8 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 //导入组件
-import register from '@/components/register.vue'
-import login from '@/components/login.vue'
+import register from '@/components/user_register.vue'
+import login from '@/components/user_login.vue'
 import main from '@/components/main.vue'
 
 import in_apply from '@/components/apply/in_apply.vue'
