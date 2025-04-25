@@ -45,7 +45,7 @@ public class TokenUtils {
             if(StrUtil.isNotBlank(token))
             {
                 String userId = JWT.decode(token).getAudience().get(0);
-                return staticUserImpl.findById(Integer.valueOf(userId));
+                return staticUserImpl.selectById(Integer.valueOf(userId));
             }
         }catch (Exception e){
             return null;

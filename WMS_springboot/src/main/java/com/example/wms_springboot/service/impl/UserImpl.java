@@ -2,6 +2,8 @@ package com.example.wms_springboot.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.wms_springboot.dao.UserDao;
 import com.example.wms_springboot.entity.User;
 import com.example.wms_springboot.exception.CustomException;
@@ -11,30 +13,40 @@ import com.example.wms_springboot.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-public class UserImpl implements IUserService {
+public class UserImpl extends ServiceImpl<UserDao,User> implements IUserService {
 
     @Autowired
+    @Resource
     private UserDao userDao;
 
     @Override
     public List<User> findAllUser() {
-        return userDao.findAllUser();
+
+        return userDao.selectList(new QueryWrapper<User>().eq("roleid",1).orderByDesc("userid"));
     }
+    public User selectById(Integer userid){
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userid",userid);
+        return getOne(queryWrapper);
+
+    }
+
 
     @Override
     public User userRegister(User user) {
         //用户名校验
         Integer userId = user.getUserid();
 
-        User dbUser = userDao.findById(userId);
+        User dbUser = selectById(userId);
         if (ObjectUtil.isNotEmpty(dbUser))//用户名已存在抛出异常
         {
             throw new CustomException(ResultCode.USER_EXIST_ERROR);
         } else {//把注册信息写到表里
-            userDao.insertData(user);
+            save(user);
 
         }
         return user;
@@ -45,8 +57,8 @@ public class UserImpl implements IUserService {
         //用户校验,密码账号对应
         Integer userid = user.getUserid();
         String password = user.getPassword();
-        User dbUser = userDao.findById(userid);
-        String dbPassword = userDao.findPasswordById(userid);
+        User dbUser = selectById(userid);
+        String dbPassword = dbUser.getPassword();
         if (ObjectUtil.isEmpty(dbUser))//用户不存在抛出异常
         {
             throw new CustomException(ResultCode.USER_NOT_EXITS_ERROR);
@@ -60,33 +72,9 @@ public class UserImpl implements IUserService {
         return dbUser;
     }
 
-
-    public User findById(Integer userid) {
-        return userDao.findById(userid);
-    }
-
-    @Override
-    public Integer updateUser(User user) {
-        return userDao.modifyUserInfoByUserId(user);
-    }
-
-    @Override
-    public Integer deleteUser(Integer userid) {
-        return userDao.removeUserByUserId(userid);
-    }
-
-    @Override
-    public Integer deleteUserBatch(List<Integer> userids) {
-        for(Integer userid : userids)
-        {
-            userDao.removeUserByUserId(userid);
-        }
-        return null;
-    }
-
     @Override
     public Integer forgetPass(User user) {
-        User dbUser = userDao.findById(user.getUserid());
+        User dbUser = selectById(user.getUserid());
         if(ObjectUtil.isEmpty(user.getUserid()) || ObjectUtil.isEmpty(user.getTelephone()))
         {
             throw new CustomException(ResultCode.PARAM_LOST);
@@ -100,7 +88,7 @@ public class UserImpl implements IUserService {
             throw new CustomException(ResultCode.CHECK_ERROR);
         }//电话不匹配
         dbUser.setPassword("123456");
-        userDao.modifyUserInfoByUserId(dbUser);
+        updateById(dbUser);
         return null;
 
     }

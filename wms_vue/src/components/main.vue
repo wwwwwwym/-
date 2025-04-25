@@ -21,9 +21,9 @@
             <el-menu-item index="/manager_in/search_in"><i class="el-icon-search"></i>入库查询</el-menu-item>
             <el-menu-item index="/manager_in/view_in" v-if="user.roleid==2"><i class="el-icon-pie-chart"></i>入库可视化</el-menu-item>
           </el-submenu>
-          <el-submenu index="/manager-out">
+          <el-submenu index="/manager_out">
             <template slot="title"><i class="el-icon-top-left"></i>出库管理</template>
-            <el-menu-item index="/manager-out/search_out"><i class="el-icon-search"></i>出库查询</el-menu-item>
+            <el-menu-item index="/manager_out/search_out"><i class="el-icon-search"></i>出库查询</el-menu-item>
             <el-menu-item index="/manager_out/view_out" v-if="user.roleid==2"><i class="el-icon-pie-chart"></i>出库可视化</el-menu-item>
           </el-submenu>
           <el-submenu index="manager_store">

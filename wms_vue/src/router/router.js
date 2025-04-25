@@ -17,8 +17,8 @@ import move_apply from '@/components/apply/move_apply.vue'
 import manager_in_search from '@/components/manager_in/search_in.vue'
 import manager_in_view from '@/components/manager_in/view_in.vue'
 
-// import manager_out_search from '@/components/submit.vue'
-// import manager_out_view from '@/components/submit.vue'
+import manager_out_search from '@/components/manager_out/search_out.vue'
+import manager_out_view from '@/components/manager_out/view_out.vue'
 
 // import manager_store_search from '@/components/submit.vue'
 // import manager_store_view from '@/components/submit.vue'
@@ -86,26 +86,26 @@ const router = new VueRouter({// 生成一个路由实例
                 },
 
                 {//2-1
-                    name:'search',
+                    name:'search_in',
                     path:'/manager_in/search_in',
                     component:manager_in_search
                 },
                 {//2-2
-                    name:'view',
+                    name:'view_in',
                     path:'/manager_in/view_in',
                     component:manager_in_view
                 },
 
-                // {//3-1
-                //     name:'search',
-                //     path:'/manager_out/search',
-                //     component:manager_out_search
-                // },
-                // {//3-2
-                //     name:'view',
-                //     path:'/manager_out/view',
-                //     component:manager_out_view
-                // },
+                {//3-1
+                    name:'search_out',
+                    path:'/manager_out/search_out',
+                    component:manager_out_search
+                },
+                {//3-2
+                    name:'view_out',
+                    path:'/manager_out/view_out',
+                    component:manager_out_view
+                },
 
                 // {//4-1
                 //     name:'search',

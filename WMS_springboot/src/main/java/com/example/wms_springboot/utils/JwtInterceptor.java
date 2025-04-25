@@ -45,7 +45,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         }
         //根据userid到数据库查询
         Integer userid = Integer.valueOf(userId);
-        User user = userImpl.findById(userid);
+        User user = userImpl.selectById(userid);
         if(user==null)
         {
             throw new CustomException(ResultCode.USER_NOT_EXITS_ERROR);
