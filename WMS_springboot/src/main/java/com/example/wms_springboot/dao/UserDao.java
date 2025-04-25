@@ -1,13 +1,12 @@
 package com.example.wms_springboot.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.wms_springboot.entity.User;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 @Mapper
-public interface UserDao  {
+public interface UserDao {
 
 
 
@@ -27,7 +26,7 @@ public interface UserDao  {
     Integer insertData(User user);
 
     //更新记录
-    @Update("update user set password=#{password} ,telephone=#{telephone},deposity=#{deposity} where userid=#{userid}")
+    @Update("update user set telephone=#{telephone},deposity=#{deposity} where userid=#{userid}")
     int modifyUserInfoByUserId(User user);
 
     @Delete("delete from user where userid=#{userid}")

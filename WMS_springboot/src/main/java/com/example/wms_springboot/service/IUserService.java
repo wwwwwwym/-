@@ -1,7 +1,6 @@
 package com.example.wms_springboot.service;
 
 import com.example.wms_springboot.entity.User;
-import com.example.wms_springboot.utils.ResponseResult;
 
 import java.util.List;
 

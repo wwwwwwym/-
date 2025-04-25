@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.sql.SQLOutput;
 
 @SpringBootApplication
-
 public class WmsSpringbootApplication {
 
     public static void main(String[] args) {

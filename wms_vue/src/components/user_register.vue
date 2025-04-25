@@ -121,19 +121,19 @@ import request from '@/request/request';
 
         options: [{
           value: '选项1',
-          label: '黄金糕'
+          label: '仓库1'
         }, {
           value: '选项2',
-          label: '双皮奶'
+          label: '仓库2'
         }, {
           value: '选项3',
-          label: '蚵仔煎'
+          label: '仓库3'
         }, {
           value: '选项4',
-          label: '龙须面'
+          label: '仓库4'
         }, {
           value: '选项5',
-          label: '北京烤鸭'
+          label: '仓库5'
         }],
         // value: '',
 

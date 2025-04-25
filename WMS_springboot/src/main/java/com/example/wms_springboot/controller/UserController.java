@@ -10,7 +10,6 @@ import com.example.wms_springboot.utils.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.registry.QueryManager;
 import java.util.List;
 
 @CrossOrigin
@@ -66,15 +65,6 @@ public class UserController {
     public ResponseResult deleteUserBatch(@RequestBody List<Integer> userids)
     {
         return ResponseResult.success(userService.deleteUserBatch(userids));
-    }
-
-//    分页模糊查询
-    @GetMapping("/selectByPage")
-    public ResponseResult selectByPage(@RequestParam Integer pageNum,
-                                       @RequestParam Integer pageSize,
-                                       @RequestParam String username,
-                                       @RequestParam Integer userid){
-        return null;
     }
 
 
