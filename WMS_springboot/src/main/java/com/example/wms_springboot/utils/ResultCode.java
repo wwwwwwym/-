@@ -12,8 +12,10 @@ public enum ResultCode {
     USER_NOT_EXITS_ERROR("2003","用户不存在"),
     PARAM_LOST("2004","参数缺失"),
     PARAM_PASSWORD_ERROR("2005","原密码输入错误"),
-    TOKEN_INVALID_ERROR("401","token无效"),
-    TOKEN_CHECK_ERROR("401","token验证失败，请重新登录"),
+    CHECK_ERROR("2006","验证失败，请重新输入"),
+    TOKEN_INVALID_ERROR("401","token无效,请重新登录"),
+    TOKEN_CHECK_ERROR("401","token验证失败,请重新登录"),
+
     ;
 
     public String code;
@@ -22,6 +24,7 @@ public enum ResultCode {
     ResultCode(String code,String msg)
     {
         this.code=code;
+
         this.msg=msg;
     }
 

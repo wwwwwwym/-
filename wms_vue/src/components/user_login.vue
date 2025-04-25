@@ -17,10 +17,31 @@
             <el-button type="primary" @click="login">登录</el-button>
             <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
-        <div> <p class="text-center mt-3">没有账号? <a href="#"  @click="toregister">点击注册</a></p></div>
+        <div > 
+          <div>  <p class="text-center mt-3">没有账号? <a href="#"  @click="toregister">点击注册</a></p></div>
+          <div> <p class="text-center mt-3">忘记密码? <a href="#"  @click="handleForgetPass">点击修改</a></p></div>
+        </div>
       </el-form>
     </div>
   </div>
+
+  <el-dialog title="忘记密码" :visible.sync="forgetPassDialog" width="30%">
+  <el-form :model="forgetUserForm" label-width="80px" style="padding-right:20px">
+    <el-form-item label="用户工号" >
+      <el-input v-model="forgetUserForm.userid" autocomplete="off" placeholder="请输入工号"></el-input>
+    </el-form-item>
+    <el-form-item label="手机号" >
+      <el-input v-model="forgetUserForm.telephone" autocomplete="off" placeholder="请输入手机号"></el-input>
+    </el-form-item>
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="forgetPassDialog = false">取 消</el-button>
+    <el-button type="primary" @click.prevent="resetPassword">确 定</el-button>
+  </div>
+  </el-dialog>
+
+
+  
 
  </div>
 </template>
@@ -54,6 +75,8 @@ import request from '@/request/request'
       };
 
        return {
+        forgetUserForm:{},//忘记密码表单数据
+        forgetPassDialog:false,
         ruleForm: {
           password: '',
           userid: '',
@@ -72,14 +95,32 @@ import request from '@/request/request'
 
     },
     methods: { 
+      
+      handleForgetPass(){//初始化表单
+      this.forgetUserForm={};
+      this.forgetPassDialog = true;
+      },
+
+      resetPassword(){
+        this.$request.put("/user/forgetPass",this.forgetUserForm).then(res=>{
+          if(res.code==0){
+            this.$message.success("已重置为初始密码");
+            this.forgetPassDialog = false;
+          }else{
+            this.$message.error(res.msg);
+          }
+        })
+      },
       login(){
         this.$refs["ruleForm"].validate((valid) => {
           // console.log("valid:",valid);
           if (valid){
             request.post('/user/login',this.ruleForm).then(res=>{
               if(res.code==0){
+                localStorage.setItem('user',JSON.stringify(res.data));//存储用户数据
                 this.$message.success("登录成功");
-                this.$router.push({path:'/main'})
+                this.$router.push({path:'/intro'})
+                
               }else{
                 this.$message.error(res.msg);
               }

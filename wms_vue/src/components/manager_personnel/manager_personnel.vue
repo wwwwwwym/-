@@ -43,7 +43,7 @@
     <el-table-column prop="roleid" label="角色id" > </el-table-column>
     <el-table-column prop="time" label="入职时间" > </el-table-column>
     <el-table-column fixed="right" label="操作" width="180" >
-      <template slot-scope="scope">
+      <template v-slot="scope">
         <el-button @click="handleClick(scope.row)" type="text" size="medium">查看</el-button>
         <el-button type="text" size="medium">编辑</el-button>
       </template>
