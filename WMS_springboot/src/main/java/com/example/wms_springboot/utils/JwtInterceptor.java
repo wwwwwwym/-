@@ -28,7 +28,7 @@ public class JwtInterceptor implements HandlerInterceptor {
     {
         String token =request.getHeader("token");//前端请求数据的header里面传过来的token
         if(StrUtil.isBlank(token))
-        {//url参数
+        {//url参数 ?token.xxx
             token=request.getParameter("token");
         }
         //执行认证

@@ -1,17 +1,12 @@
 package com.example.wms_springboot.controller;
 
 
+
 import com.example.wms_springboot.entity.deposityRecord;
-import com.example.wms_springboot.exception.CustomException;
 import com.example.wms_springboot.service.IRecordInService;
 import com.example.wms_springboot.utils.ResponseResult;
-import com.example.wms_springboot.utils.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @CrossOrigin
@@ -29,6 +24,12 @@ public class RecordInController {
         return ResponseResult.success(all);
 //        return ResponseResult.success(recordInService.findAllRecordIn());
 
+    }
+
+    @PostMapping("/addRecordIn")
+    public ResponseResult addRecordIn(@RequestBody deposityRecord deposityrecord)
+    {
+        return ResponseResult.success(recordInService.save(deposityrecord));
     }
 
 }

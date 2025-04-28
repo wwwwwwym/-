@@ -12,14 +12,17 @@
       <el-button type="primary" style="margin-left: 10px" @click="reset"><i class="el-icon-refresh-right"></i> 重置</el-button>
   </div>
   <div style="margin-top: 20px;margin-bottom: 10px">
-    <el-button type="primary" plain>新增</el-button>
-    <el-button type="danger" plain>批量删除</el-button>
+    <el-button type="primary" plain @click="handleAdd">新增</el-button>
+    <el-button type="danger" plain @click="delBatch">批量删除</el-button>
+    <el-button type="primary" plain @click="exportData">批量导出</el-button>
+
   </div>
   
 
 <!-- 表单区域 -->
   <el-table :data="tableData" stripe border style="width: 100%" 
-    :cell-style="{textAlign:'center'}" :header-cell-style="{textAlign:'center',backgroundColor:'aliceblue',color:'#666'}">
+    :cell-style="{textAlign:'center'}" :header-cell-style="{textAlign:'center',backgroundColor:'aliceblue',color:'#666'}"
+    @selection-change="handleSelectionChange">
     <!-- 多选 -->
     <el-table-column type="selection" width="55" align="center"> </el-table-column>
     <el-table-column prop="userid" label="用户id"> </el-table-column>
@@ -30,8 +33,8 @@
     <el-table-column prop="time" label="入职时间" :formatter="formatTime"> </el-table-column>
     <el-table-column fixed="right" label="操作" width="180" >
       <template v-slot="scope">
-        <el-button @click="handleClick(scope.row)" type="text" size="medium">编辑</el-button>
-        <el-button type="text" size="medium">删除</el-button>
+        <el-button  type="text" size="medium" @click="handleEdit(scope.row)">编辑</el-button>
+        <el-button type="text" size="medium" @click="del(scope.row.userid)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -49,6 +52,59 @@
     </el-pagination>
   </div>
 
+
+<!-- 新增弹出框 -->
+<el-dialog title="新增人员" :visible.sync="addFormVisible" width="30%">
+    <el-form :model="form" :rules="rules" label-width="80px" style="padding-right:20px" ref="form" >
+        <el-form-item label="工号" prop="userid">
+            <el-input placeholder="请输入工号" v-model="form.userid" ></el-input>
+        </el-form-item>
+        <el-form-item label="用户名" prop="username">
+            <el-input placeholder="请输入用户名" v-model="form.username" ></el-input>
+        </el-form-item>
+        <el-form-item label="电话" prop="telephone">
+            <el-input placeholder="请输入电话" v-model="form.telephone"></el-input>
+        </el-form-item>
+        <el-form-item label="角色" prop="roleid">
+            <el-input placeholder="请输入角色" v-model="form.roleid" ></el-input>
+        </el-form-item>
+        <el-form-item label="负责仓库" prop="deposity">
+            <el-input placeholder="请输入负责仓库" v-model="form.deposity" ></el-input>
+        </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+        <el-button @click="addFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="add">确 定</el-button>
+    </div>
+</el-dialog>
+
+<!-- 编辑弹出框 -->
+<el-dialog title="编辑信息" :visible.sync="editFormVisible" width="30%">
+    <el-form :model="form" :rules="rules" label-width="80px" style="padding-right:20px" ref="form" >
+        <el-form-item label="工号" >
+            <el-input placeholder="请输入工号" v-model="form.userid" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="用户名" >
+            <el-input placeholder="请输入用户名" v-model="form.username" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="电话" prop="telephone">
+            <el-input placeholder="请输入电话" v-model="form.telephone"></el-input>
+        </el-form-item>
+        <el-form-item label="角色" prop="roleid">
+            <el-input placeholder="请输入角色" v-model="form.roleid" ></el-input>
+        </el-form-item>
+        <el-form-item label="负责仓库" prop="deposity">
+            <el-input placeholder="请输入负责仓库" v-model="form.deposity" ></el-input>
+        </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+        <el-button @click="editFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="update">确 定</el-button>
+    </div>
+</el-dialog>
+
+
+
  </div>
 </template>
 
@@ -60,6 +116,30 @@ export default {
     this.load()
   },
     data() {
+
+      var checkNull = (rule, value, callback) => {
+        if (value === '' || value === null || value === undefined) {
+          return callback(new Error('不能为空'));
+        }
+        return callback();
+      };
+      var checkId = (rule, value, callback) => {
+        const num = Number(value);
+        if (isNaN(num)) { // 检查是否为有效数字
+          return callback(new Error('请输入数字值')); // 返回并终止
+        }
+
+        if (!Number.isInteger(num)) { // 检查是否为整数
+          return callback(new Error('必须为整数')); // 返回并终止
+        }
+
+        if (value.length !== 4) { // 检查原始输入长度
+          return callback(new Error('必须是4位工号')); // 返回并终止
+        }
+        return callback();
+      };
+
+
       return {
         value1: '',
         tableData: [],
@@ -69,15 +149,130 @@ export default {
         userid: '',
         total: 0,
         deposity: '',
+        editFormVisible:false,
+        addFormVisible:false,
+        userids: [],
+        user:JSON.parse(localStorage.getItem('user') || '{}'),
+
+        form:{
+          userid: '',
+          username: '',
+          telephone: '',
+          // deposityValue: '',
+          deposity: '',
+        },
+        deposityValue:'',
+        rules: {
+          username: [
+            {required: true, validator: checkNull, trigger: 'blur' }
+          ],
+          roleid: [
+            {required: true, validator: checkNull, trigger: 'blur' }
+          ],
+          deposity: [
+            {required: true, validator: checkNull, trigger: 'blur' }
+          ],
+          userid: [
+            {required: true, validator: checkId, trigger: 'blur' }
+          ],
+          telephone: [
+            { required: true, message: '请输入电话号码', trigger: 'change' },
+            { min: 11, max: 11, message: '长度为11个字符', trigger: 'change' }
+          ],
+        },
 
       }
     },
     methods: {
+      exportData(){//批量导出
+      if(!this.userids.length){//没有选择行的时候，全部导出，或者根据搜索条件查询到的数据全部导出
+        window.open('http://localhost:9000/user/export?token='+ this.user.token 
+        + "&username="+this.username + "&deposity="+this.deposity + "&userid="+this.userid)
+      }
+
+      },
+      delBatch(){
+        if(!this.userids.length)
+        {
+          this.$message.warning("请选择要删除的数据");
+          return
+        }
+        this.$confirm('您确认批量删除这些数据吗?', '确认删除', {type:"warning"}).then(() => {
+          this.$request.delete('/user/delete/batch',{
+            data:this.userids
+          }).then(res =>{
+            if(res.code===0)
+            {
+              this.$message.success("批量删除成功");
+              this.load(1)
+            }else{
+              this.$message.error(res.msg);
+            }
+          })
+        }).catch(() => {})
+      },
+      handleSelectionChange(rows){   
+        this.userids=rows.map(v=>v.userid)//把对象数组变成数字数组
+      },
+      del(userid){
+        this.$confirm('您确认删除吗?', '确认删除', {type:"warning"}).then(() => {
+          this.$request.delete('/user/delete/'+ userid).then(res =>{
+            if(res.code===0)
+            {
+              this.$message.success("删除成功");
+              this.load(1)
+            }else{
+              this.$message.error(res.msg);
+            }
+          })
+        }).catch(() => {})
+      },
+      handleEdit(row){//编辑
+      this.form=JSON.parse(JSON.stringify(row))//给form对象赋值，深拷贝
+      this.editFormVisible=true
+      },
+      handleAdd(){//新增
+        this.form={}
+        this.addFormVisible=true
+
+      },
+      update(){
+         this.$refs.form.validate((valid) => {
+                if(valid){
+                    this.$request.put('user/update',this.form).then(res => {
+                      if(res.code===0)
+                      {
+                        this.$message.success("保存成功");
+                        this.editFormVisible=false
+                        this.load(1)
+                      }else{
+                        this.$message.error(res.msg);
+                      }
+                    })
+                }
+            })
+      },
+      add(){
+         this.$refs.form.validate((valid) => {
+                if(valid){
+                    this.$request.post('user/add',this.form).then(res => {
+                      if(res.code===0)
+                      {
+                        this.$message.success("保存成功");
+                        this.addFormVisible=false
+                        this.load(1)
+                      }else{
+                        this.$message.error(res.msg);
+                      }
+                    })
+                }
+            })
+      },
       reset(){
         this.username=''
         this.userid=''
         this.deposity=''
-        this.load()
+        this.load(this.pageNum)
       },
       load(pageNum){//分页查询
       if(pageNum)
@@ -109,8 +304,8 @@ export default {
     },
     handleCurrentChange(pageNum){
       this.pageNum=pageNum
-      this.load()
-    }
+      this.load(pageNum)
+    },
 
     },
   }

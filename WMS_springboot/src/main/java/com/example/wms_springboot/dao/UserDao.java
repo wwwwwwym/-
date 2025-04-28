@@ -22,7 +22,7 @@ public interface UserDao extends BaseMapper<User> {
 //    @Select("select password from user where userid=#{userid}")
 //    String findPasswordById(@Param("userid") Integer userid);//把这行的name传给上一行
 //
-//    //新增记录
+    //新增记录
 //    @Insert("insert into user(userid,username,password,time,deposity,telephone) values (#{userid},#{username},#{password},CURRENT_TIMESTAMP,#{deposity},#{telephone})")
 //    Integer insertData(User user);
 //

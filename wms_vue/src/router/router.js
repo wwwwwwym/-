@@ -163,7 +163,7 @@ router.beforeEach((to,from,next)=>{//路由守卫
     // console.log(to,from,next)
     let user=JSON.parse(localStorage.getItem('user') || '{}');//获取当前用户信息
     let adminPaths=['/manager_out/view_out','/manager_in/view_in','/manager_personnel','/manager_other','/manager_store/view']
-    if(user.roleid!==2 && adminPaths.includes(to.path)){//如果当前用户不是管理员，当前到达路径是管理员才有权限访问的路径，这个时候就让用户去到去到没有权限的页面
+    if(user.roleid==1 && adminPaths.includes(to.path)){//如果当前用户不是管理员，当前到达路径是管理员才有权限访问的路径，这个时候就让用户去到去到没有权限的页面
         next('/403')
     }
     else{

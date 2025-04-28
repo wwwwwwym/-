@@ -15,6 +15,7 @@ import java.util.Date;
 @TableName("deposityrecord")
 public class deposityRecord {
 
+
     @TableId(type = IdType.AUTO)
     private Integer recordId;//记录id
     private String pname;//产品名称

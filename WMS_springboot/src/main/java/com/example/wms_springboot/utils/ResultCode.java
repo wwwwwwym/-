@@ -13,8 +13,10 @@ public enum ResultCode {
     PARAM_LOST("2004","参数缺失"),
     PARAM_PASSWORD_ERROR("2005","原密码输入错误"),
     CHECK_ERROR("2006","验证失败，请重新输入"),
+    DELETE_ERROR("2007","删除内容不能包含当前用户"),
     TOKEN_INVALID_ERROR("401","token无效,请重新登录"),
     TOKEN_CHECK_ERROR("401","token验证失败,请重新登录"),
+
 
     ;
 

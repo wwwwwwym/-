@@ -1,6 +1,7 @@
 package com.example.wms_springboot.entity;
 
 
+import cn.hutool.core.annotation.Alias;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -18,14 +19,23 @@ import java.util.Date;
 @TableName("user")
 public class User {
 
-    @TableId(type = IdType.INPUT)
+
+    @TableId
+    @Alias("工号")
     private Integer userid;//用户id
+    @Alias("用户名")
     private String username;//用户名称
+    @Alias("用户密码")
     private String password;//用户密码
+    @Alias("用户角色")
     private Integer roleid;//角色id
+    @Alias("入职时间")
     private Date time;//入职时间
+    @Alias("负责仓库")
     private String deposity;//负责仓库
+    @Alias("用户电话")
     private String telephone;//员工电话
+
 
     @TableField(exist = false)
     private String token;

@@ -40,7 +40,7 @@
     <el-input type="textarea" v-model="ruleForm.desc"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="submitForm('ruleForm')">提交申请</el-button>
+    <el-button type="primary" @click="apply">提交申请</el-button>
     <el-button @click="resetForm('ruleForm')">重置</el-button>
   </el-form-item>
 </el-form>
@@ -119,17 +119,25 @@
         next() {
             this.active=1;
         },
-        submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('提交成功');
-            this.active=1;
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-        },
+        apply(){
+         this.$refs.ruleForm.validate((valid) => {
+                if(valid){
+                    this.$request.post({
+                      url:this.ruleForm.in_out==1? '/recordIn/addRecordIn':'/recordOut/addRecordOut',
+                      data: this.ruleForm
+                    }).then(res => {
+                      if(res.code===0)
+                      {
+                        this.$message.success("提交成功");
+                        this.active=1;
+                      }else{
+                        this.$message.error(res.msg);
+                      }
+                    })
+                }
+            })
+
+      },
         resetForm(formName) {
             this.$refs[formName].resetFields();
         }

@@ -19,22 +19,22 @@
           <el-submenu index="/manager_in">
             <template slot="title"><i class="el-icon-bottom-right"></i>入库管理</template>
             <el-menu-item index="/manager_in/search_in"><i class="el-icon-search"></i>入库查询</el-menu-item>
-            <el-menu-item index="/manager_in/view_in" v-if="user.roleid==2"><i class="el-icon-pie-chart"></i>入库可视化</el-menu-item>
+            <el-menu-item index="/manager_in/view_in" v-if="user.roleid!=1"><i class="el-icon-pie-chart"></i>入库可视化</el-menu-item>
           </el-submenu>
           <el-submenu index="/manager_out">
             <template slot="title"><i class="el-icon-top-left"></i>出库管理</template>
             <el-menu-item index="/manager_out/search_out"><i class="el-icon-search"></i>出库查询</el-menu-item>
-            <el-menu-item index="/manager_out/view_out" v-if="user.roleid==2"><i class="el-icon-pie-chart"></i>出库可视化</el-menu-item>
+            <el-menu-item index="/manager_out/view_out" v-if="user.roleid!=1"><i class="el-icon-pie-chart"></i>出库可视化</el-menu-item>
           </el-submenu>
           <el-submenu index="manager_store">
             <template slot="title"><i class="el-icon-shopping-cart-2"></i>库存管理</template>
             <el-menu-item index="manager_store/search"><i class="el-icon-search"></i>库存查询</el-menu-item>
-            <el-menu-item index="manager_store/view" v-if="user.roleid==2"><i class="el-icon-pie-chart"></i>库存可视化</el-menu-item>
+            <el-menu-item index="manager_store/view" v-if="user.roleid!=1"><i class="el-icon-pie-chart"></i>库存可视化</el-menu-item>
           </el-submenu>
-          <el-menu-item index="/manager_personnel" v-if="user.roleid==2">
+          <el-menu-item index="/manager_personnel" v-if="user.roleid!=1">
             <template slot="title"><i class="el-icon-user"></i>人员管理</template>
           </el-menu-item>
-          <el-submenu index="/manager_other" v-if="user.roleid==2">
+          <el-submenu index="/manager_other" v-if="user.roleid!=1">
             <template slot="title"><i class="el-icon-edit"></i>其他管理</template>
             <el-menu-item index="/manager_other/addkind"><i class="el-icon-plus"></i>种类添加</el-menu-item>
             <el-menu-item index="/manager_other/addhouse"><i class="el-icon-house"></i>创建仓库</el-menu-item>

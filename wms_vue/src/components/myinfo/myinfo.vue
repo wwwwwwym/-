@@ -3,7 +3,7 @@
     <el-card style="width:50%">
         <el-form :model="user" :rules="rules" label-width="80px" style="padding-right:20px" ref="form" >
             <el-form-item label="用户名" prop="username">
-                <el-input placeholder="请输入用户名" v-model="user.username" disabled></el-input>
+                <el-input placeholder="请输入用户名" v-model="user.username" ></el-input>
             </el-form-item>
             <el-form-item label="工号" prop="userid">
                 <el-input placeholder="请输入工号" v-model="user.userid" disabled></el-input>
@@ -45,6 +45,12 @@ import dayjs from 'dayjs'
  export default {
     name:'app',
     data () {
+        var checkNull = (rule, value, callback) => {
+        if (value === '' || value === null || value === undefined) {
+          return callback(new Error('不能为空'));
+        }
+        return callback();
+      };
         
        return {
         user:JSON.parse(localStorage.getItem('user') || '{}'),
@@ -73,6 +79,9 @@ import dayjs from 'dayjs'
                 { required: true, message: '请输入电话号码', trigger: 'change' },
                 { min: 11, max: 11, message: '长度为11个字符', trigger: 'change' }
             ],
+            username: [
+            {required: true, validator: checkNull, trigger: 'blur' }
+          ],
         },
        }
     },

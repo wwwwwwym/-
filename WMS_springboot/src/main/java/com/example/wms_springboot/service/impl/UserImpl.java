@@ -10,10 +10,14 @@ import com.example.wms_springboot.exception.CustomException;
 import com.example.wms_springboot.service.IUserService;
 import com.example.wms_springboot.utils.ResultCode;
 import com.example.wms_springboot.utils.TokenUtils;
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.xml.rpc.ServiceException;
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -28,6 +32,7 @@ public class UserImpl extends ServiceImpl<UserDao,User> implements IUserService 
 
         return userDao.selectList(new QueryWrapper<User>().eq("roleid",1).orderByDesc("userid"));
     }
+
     public User selectById(Integer userid){
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userid",userid);
@@ -35,17 +40,17 @@ public class UserImpl extends ServiceImpl<UserDao,User> implements IUserService 
 
     }
 
-
     @Override
     public User userRegister(User user) {
         //用户名校验
         Integer userId = user.getUserid();
 
         User dbUser = selectById(userId);
-        if (ObjectUtil.isNotEmpty(dbUser))//用户名已存在抛出异常
+        if (ObjectUtil.isNotEmpty(dbUser))//用户已存在抛出异常
         {
             throw new CustomException(ResultCode.USER_EXIST_ERROR);
         } else {//把注册信息写到表里
+            System.out.println("Received userid: " + user.getUserid());
             save(user);
 
         }
