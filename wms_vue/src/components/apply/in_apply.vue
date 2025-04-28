@@ -99,7 +99,7 @@
             trigger: ['blur'] }
           ],
           region: [
-            { required: true, message: '请选择活动区域', trigger: 'change' }
+            { required: true, message: '请选择仓库', trigger: 'change' }
           ],
           in_out: [
             { required: true, message: '请选择操作类型', trigger: 'change' }

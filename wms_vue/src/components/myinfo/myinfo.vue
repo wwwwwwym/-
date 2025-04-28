@@ -23,10 +23,8 @@
             <!-- <el-form-item label="负责仓库" prop="deposity">
                 <el-input placeholder="请输入仓库名" v-model="user.deposity" ></el-input>
             </el-form-item> -->
-            <el-form-item label="负责仓库">
-                <el-select v-model="deposityValue" @change="handleDepositChange" placeholder="请选择所负责仓库" style="width:100%;">
-                    <el-option  v-for="item in options" :key="item.value" :label="item.label" :value="item.value" > </el-option>
-                </el-select>
+            <el-form-item label="负责仓库" prop="deposity">
+                <el-input  v-model="user.deposity" disabled></el-input>
             </el-form-item>
             <div>
                 <el-button type="primary" @click="update">确 认</el-button>

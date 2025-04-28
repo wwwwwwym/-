@@ -7,15 +7,17 @@
       <el-input v-model="deposity" placeholder="请输入负责仓库" style="width:20%; margin-left: 10px"></el-input>
       <el-input v-model="username" placeholder="请输入用户名" style="width:20%; margin-left: 10px"></el-input>
       <el-input v-model="userid" placeholder="请输入工号" style="width:20%; margin-left: 10px"></el-input>  
-
       <el-button type="primary" style="margin-left: 40px" @click="load(1)"><i class="el-icon-search"></i> 查询</el-button>
       <el-button type="primary" style="margin-left: 10px" @click="reset"><i class="el-icon-refresh-right"></i> 重置</el-button>
   </div>
+  
   <div style="margin-top: 20px;margin-bottom: 10px">
     <el-button type="primary" plain @click="handleAdd">新增</el-button>
     <el-button type="danger" plain @click="delBatch">批量删除</el-button>
     <el-button type="primary" plain @click="exportData">批量导出</el-button>
-
+    <el-upload action="http://localhost:9000/user/import" :headers="{token:user.token}" :on-success="handleImport" style="display:inline-block ;margin-left: 10px" :show-file-list="false">
+      <el-button type="primary" plain>批量导入</el-button>
+    </el-upload>
   </div>
   
 
@@ -184,10 +186,21 @@ export default {
       }
     },
     methods: {
+      handleImport(res){
+        if(res.code===0){
+          this.$message.success("导入成功");
+          this.load(1)
+        }else{
+          this.$message.error(res.msg);
+        }
+      },
       exportData(){//批量导出
       if(!this.userids.length){//没有选择行的时候，全部导出，或者根据搜索条件查询到的数据全部导出
         window.open('http://localhost:9000/user/export?token='+ this.user.token 
         + "&username="+this.username + "&deposity="+this.deposity + "&userid="+this.userid)
+      }else{
+        let useridsStr = this.userids.join(',')
+        window.open('http://localhost:9000/user/export?token='+ this.user.token + "&userids="+useridsStr)//传了选中的行
       }
 
       },

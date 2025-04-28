@@ -3,6 +3,8 @@ package com.example.wms_springboot.controller;
 
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -17,6 +19,7 @@ import com.example.wms_springboot.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @CrossOrigin
@@ -160,28 +165,32 @@ public class UserController {
     public void exportData(@RequestParam(required = false) String username,
                            @RequestParam(required = false) String deposity,
                            @RequestParam(required = false) Integer userid,
+                           @RequestParam(required = false) String userids,
                            HttpServletResponse response) throws IOException {
         ExcelWriter writer = ExcelUtil.getWriter(true);
-        List<User> list=new ArrayList<>();
-
         QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
-        // 仅当 userid 不为空时，添加精确匹配条件
-        if (userid!=null) {
-            String id=String.valueOf(userid);
-            queryWrapper.like("userid", id.trim());
-        }
 
-        // 仅当 username 非空且非空字符串时，添加模糊匹配条件
-        if (StringUtils.hasText(username)) {
-            queryWrapper.like("username", username.trim());
-        }
-        if (StringUtils.hasText(deposity)) {
-            queryWrapper.like("deposity", deposity.trim());
-        }
+        List<User> list;
+        if(StrUtil.isNotBlank(userids)){
+            List<Integer> useridsArr1 = Arrays.stream(userids.split(",")).map(Integer::valueOf).collect(Collectors.toList());//Stream流，把字符串list转成Integer的list
+            queryWrapper.in("userid",useridsArr1);
+        }else {
 
+            // 仅当 userid 不为空时，添加精确匹配条件
+            if (userid!=null) {
+                String id=String.valueOf(userid);
+                queryWrapper.like("userid", id.trim());
+            }
+            // 仅当 username 非空且非空字符串时，添加模糊匹配条件
+            if (StringUtils.hasText(username)) {
+                queryWrapper.like("username", username.trim());
+            }
+            if (StringUtils.hasText(deposity)) {
+                queryWrapper.like("deposity", deposity.trim());
+            }
+         }
         //全部导出
         list = userService.list(queryWrapper);//查询出当前User表的所有数据
-
         writer.write(list,true);
 
         //设置浏览器响应格式
@@ -193,7 +202,25 @@ public class UserController {
         writer.close();
         outputStream.flush();
         outputStream.close();//关闭输入流
+    }
 
+    /**
+     * 数据批量导入，与文件上传类似
+     */
+    @PostMapping("/import")
+    public ResponseResult importData(MultipartFile file) throws IOException {
+        ExcelReader reader = ExcelUtil.getReader(file.getInputStream());
+        List<User> userList = reader.readAll(User.class);
+
+        boolean saveBatch;
+        //写入数据到数据库
+        try {
+             saveBatch = userService.saveBatch(userList);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseResult.error("批量导入数据出错");
+        }
+        return ResponseResult.success(saveBatch);
     }
 
 }

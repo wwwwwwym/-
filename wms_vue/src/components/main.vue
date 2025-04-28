@@ -28,22 +28,20 @@
           </el-submenu>
           <el-submenu index="manager_store">
             <template slot="title"><i class="el-icon-shopping-cart-2"></i>库存管理</template>
-            <el-menu-item index="manager_store/search"><i class="el-icon-search"></i>库存查询</el-menu-item>
-            <el-menu-item index="manager_store/view" v-if="user.roleid!=1"><i class="el-icon-pie-chart"></i>库存可视化</el-menu-item>
+            <el-menu-item index="/manager_store/search_store"><i class="el-icon-search"></i>库存查询</el-menu-item>
+            <el-menu-item index="/manager_store/view_store" v-if="user.roleid!=1"><i class="el-icon-pie-chart"></i>库存可视化</el-menu-item>
           </el-submenu>
           <el-menu-item index="/manager_personnel" v-if="user.roleid!=1">
             <template slot="title"><i class="el-icon-user"></i>人员管理</template>
           </el-menu-item>
-          <el-submenu index="/manager_other" v-if="user.roleid!=1">
-            <template slot="title"><i class="el-icon-edit"></i>其他管理</template>
-            <el-menu-item index="/manager_other/addkind"><i class="el-icon-plus"></i>种类添加</el-menu-item>
-            <el-menu-item index="/manager_other/addhouse"><i class="el-icon-house"></i>创建仓库</el-menu-item>
-          </el-submenu>
+          <el-menu-item index="/addDeposity" v-if="user.roleid!=1">
+            <template slot="title"><i class="el-icon-house"></i>新建仓库</template>
+          </el-menu-item>
 
           <el-menu-item index="/myapplication">
             <template slot="title"><i class="el-icon-finished"></i>我的申请</template>
           </el-menu-item>
-          <el-menu-item index="myinfo">
+          <el-menu-item index="/myinfo">
             <template slot="title"><i class="el-icon-user"></i>个人中心</template>
           </el-menu-item>
         </el-menu>

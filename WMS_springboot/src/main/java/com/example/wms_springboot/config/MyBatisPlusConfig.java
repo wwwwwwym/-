@@ -1,4 +1,4 @@
-package com.example.wms_springboot.controller;
+package com.example.wms_springboot.config;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.mybatis.spring.annotation.MapperScan;

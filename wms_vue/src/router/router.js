@@ -20,13 +20,12 @@ import manager_in_view from '@/components/manager_in/view_in.vue'
 import manager_out_search from '@/components/manager_out/search_out.vue'
 import manager_out_view from '@/components/manager_out/view_out.vue'
 
-// import manager_store_search from '@/components/submit.vue'
-// import manager_store_view from '@/components/submit.vue'
+import manager_store_search from '@/components/manager_store/search_store.vue'
+import manager_store_view from '@/components/manager_store/view_store.vue'
 
 import manager_personnel from '@/components/manager_personnel/manager_personnel.vue'
 
-// import manager_other_addkind from '@/components/submit.vue'
-// import manager_other_addhouse from '@/components/submit.vue'
+import addDeposity from '@/components/manager_other/addDeposity.vue'
 
 // import myapplication from '@/components/submit.vue'
 import myinfo from '@/components/myinfo/myinfo.vue'
@@ -107,16 +106,16 @@ const router = new VueRouter({// 生成一个路由实例
                     component:manager_out_view
                 },
 
-                // {//4-1
-                //     name:'search',
-                //     path:'/manager_store/search',
-                //     component:manager_store_search
-                // },
-                // {//4-2
-                //     name:'view',
-                //     path:'/manager_store/view',
-                //     component:manager_store_view
-                // },
+                {//4-1
+                    name:'search_store',
+                    path:'/manager_store/search_store',
+                    component:manager_store_search
+                },
+                {//4-2
+                    name:'view_store',
+                    path:'/manager_store/view_store',
+                    component:manager_store_view
+                },
 
                 {//5
                     name:'manager_personnel',
@@ -124,17 +123,11 @@ const router = new VueRouter({// 生成一个路由实例
                     component:manager_personnel
                 },
 
-
-                // {//6-1
-                //     name:'addkind',
-                //     path:'/manager_other/addkind',
-                //     component:manager_other_addkind
-                // },
-                // {//6-2
-                //     name:'addhouse',
-                //     path:'/manager_other/addhouse',
-                //     component:manager_other_addhouse
-                // },
+                {//6-2
+                    name:'addDeposity',
+                    path:'/addDeposity',
+                    component:addDeposity
+                },
 
                 // {//7
                 //     name:'myapplication',
