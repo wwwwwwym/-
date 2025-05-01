@@ -9,6 +9,7 @@ import main from '@/components/main.vue'
 import intro from '@/components/intro/intro.vue'
 import error from '@/components/Auth/403.vue'
 import nofound from '@/components/Auth/404.vue'
+import logs_info from '@/components/logs_info/logs_info.vue'
 import newPassword from '@/components/myinfo/newPassword.vue'
 
 import in_apply from '@/components/apply/in_apply.vue'
@@ -71,6 +72,11 @@ const router = new VueRouter({// 生成一个路由实例
                     name:'intro',
                     path:'/intro',
                     component:intro
+                },
+                {
+                    name:'logs_info',
+                    path:'/logs_info',
+                    component:logs_info
                 },
 
                 {//1-1

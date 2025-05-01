@@ -23,6 +23,8 @@ public class recordOut {
     private Integer recordId;//记录id
     @Alias("产品名称")
     private String pname;//产品名称
+    @Alias("产品图片")
+    private String picture;//产品照片
     @Alias("仓库id")
     private String deposity;//仓库
     @Alias("产品数量")

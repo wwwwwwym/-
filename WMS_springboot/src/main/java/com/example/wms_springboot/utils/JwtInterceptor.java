@@ -6,6 +6,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.example.wms_springboot.config.AuthAccess;
 import com.example.wms_springboot.entity.User;
 import com.example.wms_springboot.exception.CustomException;
 import com.example.wms_springboot.service.impl.UserImpl;
@@ -30,6 +31,13 @@ public class JwtInterceptor implements HandlerInterceptor {
         if(StrUtil.isBlank(token))
         {//url参数 ?token.xxx
             token=request.getParameter("token");
+        }
+        //如果不是映射到方法，直接通过
+        if(handler instanceof HandlerMethod){
+            AuthAccess annotation = ((HandlerMethod) handler).getMethodAnnotation(AuthAccess.class);
+            if(annotation!=null){
+                return true;
+            }
         }
         //执行认证
         if(StrUtil.isBlank(token))

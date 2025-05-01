@@ -10,12 +10,15 @@ import cn.hutool.poi.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.wms_springboot.config.AuthAccess;
+import com.example.wms_springboot.config.Logs;
 import com.example.wms_springboot.entity.User;
 import com.example.wms_springboot.exception.CustomException;
 import com.example.wms_springboot.service.IUserService;
 import com.example.wms_springboot.utils.ResponseResult;
 import com.example.wms_springboot.utils.ResultCode;
 import com.example.wms_springboot.utils.TokenUtils;
+import com.example.wms_springboot.utils.logType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +46,7 @@ public class UserController {
     /**
      * 查询所有
      */
+    @AuthAccess
     @GetMapping("/allUserData")
     public ResponseResult getUserData(){
 
@@ -61,6 +65,7 @@ public class UserController {
 /**
  * 注册
  */
+    @Logs(operation = "人员管理",type = logType.REGISTER)
     @PostMapping("/register")
     public ResponseResult userRegister(@RequestBody User user)
     {
@@ -78,6 +83,7 @@ public class UserController {
 /**
  * 登录
  */
+    @Logs(operation = "人员管理",type = logType.LOGIN)
     @PostMapping("/login")
     public ResponseResult userLogin(@RequestBody User user)
     {
@@ -87,6 +93,7 @@ public class UserController {
     /**
      * 修改
      */
+    @Logs(operation = "人员管理",type = logType.UPDATE)
     @PutMapping("/update")
     public ResponseResult updateUser(@RequestBody User user)
     {
@@ -95,6 +102,7 @@ public class UserController {
     /**
      * 新增
      */
+    @Logs(operation = "人员管理",type = logType.ADD)
     @PostMapping("/add")
     public ResponseResult addUser(@RequestBody User user)
     {
@@ -104,6 +112,7 @@ public class UserController {
     /**
      * 删除
      */
+    @Logs(operation = "人员管理",type = logType.DELETE)
     @DeleteMapping("/delete/{userid}")
     public ResponseResult deleteUser(@PathVariable Integer userid)
 

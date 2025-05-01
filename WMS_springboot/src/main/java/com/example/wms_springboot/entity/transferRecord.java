@@ -17,8 +17,9 @@ public class transferRecord {
     @TableId(type = IdType.AUTO)
     private Integer id;//记录id
     private String pname;//产品名称
-    private Integer fromId;//来源仓库id
-    private Integer toId;//目的仓库id
+    private String picture;//产品照片
+    private String from;//来源仓库
+    private String to;//目的仓库
     private Integer quantity;//产品数量
     private Double price;//产品价格
     private Integer state;//当前状态

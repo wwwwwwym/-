@@ -46,7 +46,7 @@
     <el-table-column type="selection" width="60" align="center"> </el-table-column>
     <el-table-column prop="stockid" label="记录编号" width="90"> </el-table-column>
     <el-table-column prop="pname" label="产品名称" > </el-table-column>
-    <el-table-column prop="code" label="产品条码" > </el-table-column>
+    <el-table-column prop="picture" label="产品图片" > </el-table-column>
     <el-table-column prop="deposity" label="现存仓库" width="90"> </el-table-column>
     <el-table-column prop="oldDeposity" label="原仓库" width="90"> </el-table-column>
     <el-table-column prop="quantity" label="数量" width="90"> </el-table-column>
@@ -76,7 +76,18 @@
 
 <!-- 新增弹出框 -->
 <el-dialog title="新增产品" :visible.sync="addFormVisible" width="30%">
-    <el-form :model="form" :rules="rules" label-width="80px" style="padding-right:20px" ref="form" >
+    <el-form :model="form" :rules="rules" label-width="80px" style="padding:20px" ref="form" >
+      <div style="margin:15px ;text-align:center">
+        <el-upload
+          class="avatar-uploader"
+          action="https://localhost:9000/file/upload"
+          :headers="{ token:user.token }"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess">
+          <img v-if="form.picture" :src="form.picture" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </div>
         <el-form-item label="现存仓库" prop="deposity">
             <el-input placeholder="请输入现存仓库" v-model="form.deposity" ></el-input>
         </el-form-item>
@@ -89,9 +100,6 @@
         <el-form-item label="价格" prop="price">
             <el-input placeholder="请输入产品单价" v-model.number="form.price" ></el-input>
         </el-form-item>
-        <el-form-item label="产品条码" prop="code">
-            <el-input placeholder="请输入产品条码" v-model="form.code" ></el-input>
-        </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
         <el-button @click="addFormVisible = false">取 消</el-button>
@@ -101,7 +109,18 @@
 
 <!-- 编辑弹出框 -->
 <el-dialog title="编辑信息" :visible.sync="editFormVisible" width="30%">
-    <el-form :model="form" :rules="rules" label-width="80px" style="padding-right:20px" ref="form" >
+    <el-form :model="form" :rules="rules" label-width="80px" style="padding:20px" ref="form" >
+      <div style="margin:15px ;text-align:center">
+        <el-upload
+          class="avatar-uploader"
+          action="https://localhost:9000/file/upload"
+          :headers="{ token:user.token }"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess">
+          <img v-if="form.picture" :src="form.picture" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </div>
         <el-form-item label="现存仓库" prop="deposity">
             <el-input placeholder="请输入现存仓库" v-model="form.deposity" ></el-input>
         </el-form-item>
@@ -113,9 +132,6 @@
         </el-form-item>
         <el-form-item label="价格" prop="price">
             <el-input placeholder="请输入产品单价" v-model="form.price" ></el-input>
-        </el-form-item>
-        <el-form-item label="产品条码" prop="code">
-            <el-input placeholder="请输入产品条码" v-model="form.code" ></el-input>
         </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -154,7 +170,7 @@ import dayjs from 'dayjs'
           pname: '',
           quantity: '',
           price: '',
-          code: '',
+          picture: '',
         },
         editFormVisible:false,
         addFormVisible:false,
@@ -202,6 +218,10 @@ import dayjs from 'dayjs'
       }
     },
     methods: {
+      // handleAvatarSuccess(response,file,fileList){
+      //   this.form.picture = response.data
+
+      // },
         delBatch(){
         if(!this.stockids.length)
         {
@@ -342,5 +362,29 @@ import dayjs from 'dayjs'
 .title{
   text-align:left;
 }
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width:100%
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
  
 </style>

@@ -22,12 +22,12 @@ public class stockInfo {
     private String deposity;//所在仓库
     @Alias("产品名称")
     private String pname;//产品名称
+    @Alias("产品图片")
+    private String picture;//产品照片
     @Alias("产品数量")
     private Integer quantity;//产品数量
     @Alias("产品价格")
     private Double price;//产品价格
-    @Alias("产品条码")
-    private String code;//产品条码
     @Alias("入库时间")
     private Date stocktime;//入库时间
 
