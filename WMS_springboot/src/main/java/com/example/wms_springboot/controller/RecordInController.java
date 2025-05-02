@@ -2,6 +2,8 @@ package com.example.wms_springboot.controller;
 
 
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
@@ -56,6 +58,9 @@ public class RecordInController {
     @PostMapping("/add")
     public ResponseResult addRecord(@RequestBody recordIn record)
     {
+        record.setApplyTime(DateUtil.today());
+        record.setReviewTime(DateUtil.today());
+//        record.setNo(IdUtil.fastSimpleUUID());订单编号
         return ResponseResult.success(recordInService.save(record));
     }
 
@@ -85,17 +90,15 @@ public class RecordInController {
     public ResponseResult selectByPage(@RequestParam Integer pageNum,
                                        @RequestParam Integer pageSize,
                                        @RequestParam String pname,
-                                       @RequestParam String deposity){
+                                       @RequestParam String deposityIn,
+                                       @RequestParam String deposityOut,
+                                       @RequestParam String type){
         QueryWrapper<recordIn> queryWrapper = new QueryWrapper<recordIn>().orderByDesc("record_id");
 
-
-        // 仅当 pname 非空且非空字符串时，添加模糊匹配条件
-        if (StringUtils.hasText(pname)) {
-            queryWrapper.like("pname", pname.trim());
-        }
-        if (StringUtils.hasText(deposity)) {
-            queryWrapper.like("deposity", deposity.trim());
-        }
+        queryWrapper.like(StrUtil.isNotBlank(pname), "pname", pname);
+        queryWrapper.like(StrUtil.isNotBlank(deposityIn), "deposity_in", deposityIn);
+        queryWrapper.like(StrUtil.isNotBlank(deposityOut), "deposity_out", deposityOut);
+        queryWrapper.like(StrUtil.isNotBlank(type), "type", type);
         IPage<recordIn> page =new Page<>(pageNum,pageSize);
         return ResponseResult.success(recordInService.page(page,queryWrapper));
     }
@@ -105,7 +108,9 @@ public class RecordInController {
      */
     @GetMapping("/export")
     public void exportData(@RequestParam(required = false) String pname,
-                           @RequestParam(required = false) String deposity,
+                           @RequestParam(required = false) String deposityIn,
+                           @RequestParam(required = false) String deposityOut,
+                           @RequestParam(required = false) String type,
                            @RequestParam(name = "record_ids", required = false) String recordIds,
                            HttpServletResponse response) throws IOException {
         ExcelWriter writer = ExcelUtil.getWriter(true);
@@ -117,13 +122,10 @@ public class RecordInController {
             queryWrapper.in("record_id",recordIdsArr1);
         }else {
 
-            // 仅当 pname 非空且非空字符串时，添加模糊匹配条件
-            if (StringUtils.hasText(pname)) {
-                queryWrapper.like("pname", pname.trim());
-            }
-            if (StringUtils.hasText(deposity)) {
-                queryWrapper.like("deposity", deposity.trim());
-            }
+            queryWrapper.like(StrUtil.isNotBlank(pname), "pname", pname);
+            queryWrapper.like(StrUtil.isNotBlank(deposityIn), "deposity_in", deposityIn);
+            queryWrapper.like(StrUtil.isNotBlank(deposityOut), "deposity_out", deposityOut);
+            queryWrapper.like(StrUtil.isNotBlank(type), "type", type);
         }
         //全部导出
         list = recordInService.list(queryWrapper);//查询出当前deposityRecord表的所有数据
@@ -131,7 +133,7 @@ public class RecordInController {
 
         //设置浏览器响应格式
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
-        response.setHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode("入库信息表","UTF-8") + ".xlsx");
+        response.setHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode("货流信息表","UTF-8") + ".xlsx");
 
         ServletOutputStream outputStream = response.getOutputStream();
         writer.flush(outputStream,true);

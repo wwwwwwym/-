@@ -1,31 +1,19 @@
 package com.example.wms_springboot.controller;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.poi.excel.ExcelReader;
-import cn.hutool.poi.excel.ExcelUtil;
-import cn.hutool.poi.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.wms_springboot.entity.logs;
-import com.example.wms_springboot.entity.recordIn;
 import com.example.wms_springboot.service.ILogsService;
-import com.example.wms_springboot.service.IRecordInService;
 import com.example.wms_springboot.service.IUserService;
 import com.example.wms_springboot.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
+
+@CrossOrigin
 @RestController
 @RequestMapping("/logs")
 public class LogsController {

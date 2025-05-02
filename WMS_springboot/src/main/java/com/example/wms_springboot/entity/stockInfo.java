@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -27,8 +28,8 @@ public class stockInfo {
     @Alias("产品数量")
     private Integer quantity;//产品数量
     @Alias("产品价格")
-    private Double price;//产品价格
+    private BigDecimal price;//产品价格
     @Alias("入库时间")
-    private Date stocktime;//入库时间
+    private String stocktime;//入库时间
 
 }

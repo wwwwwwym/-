@@ -15,7 +15,7 @@
       
       <div class="block" style="margin-left: 10px">
         <el-date-picker
-          v-model="value1"
+          v-model="stocktime"
           type="date"
           placeholder="选择日期">
         </el-date-picker>
@@ -48,10 +48,9 @@
     <el-table-column prop="pname" label="产品名称" > </el-table-column>
     <el-table-column prop="picture" label="产品图片" > </el-table-column>
     <el-table-column prop="deposity" label="现存仓库" width="90"> </el-table-column>
-    <el-table-column prop="oldDeposity" label="原仓库" width="90"> </el-table-column>
     <el-table-column prop="quantity" label="数量" width="90"> </el-table-column>
     <el-table-column prop="price" label="价格" width="90"> </el-table-column>
-    <el-table-column prop="stocktime" label="入库时间" width="180" :formatter="formatTime"> </el-table-column>
+    <el-table-column prop="stocktime" label="入库时间" width="180"> </el-table-column>
     <el-table-column fixed="right" label="操作" width="">
       <template slot-scope="scope">
         <el-button  type="text" size="medium" @click="handleEdit(scope.row)">编辑</el-button>
@@ -148,14 +147,13 @@
 
 <script>
 import request from '@/request/request'
-import dayjs from 'dayjs'
  export default {
   created(){
     this.load();
   },
     data() {
       return {
-        value1: '',
+        stocktime: '',
         tableData: [],
         pageNum: 1,//当前页码
         pageSize: 5,//每页个数
@@ -258,6 +256,7 @@ import dayjs from 'dayjs'
       reset(){
         this.pname=''
         this.deposity=''
+        this.stocktime=''
         this.load(this.pageNum)
       },
       handleImport(res){
@@ -289,7 +288,8 @@ import dayjs from 'dayjs'
             pageNum: this.pageNum,
             pageSize: this.pageSize,
             pname: this.pname,
-            deposity:this.deposity
+            deposity:this.deposity,
+            stocktime:this.stocktime
           }
         }).then(res => {
           if(res.code == 0){
@@ -302,10 +302,6 @@ import dayjs from 'dayjs'
     
         })
       },
-      formatTime(row, column, cellValue) {
-      if (!cellValue) return '暂无时间'; // 处理空值
-      return dayjs(cellValue).format('YYYY-MM-DD');
-    },
     handleCurrentChange(pageNum){
       this.pageNum=pageNum
       this.load(pageNum)

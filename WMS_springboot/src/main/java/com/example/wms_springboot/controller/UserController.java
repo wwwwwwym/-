@@ -204,7 +204,7 @@ public class UserController {
 
         //设置浏览器响应格式
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
-        response.setHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode("用户信息表","UTF-8") + ".xlsx");
+        response.setHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode("人员信息表","UTF-8") + ".xlsx");
 
         ServletOutputStream outputStream = response.getOutputStream();
         writer.flush(outputStream,true);

@@ -1,5 +1,8 @@
 package com.example.wms_springboot.controller;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
@@ -21,12 +24,13 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @CrossOrigin
@@ -34,7 +38,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/stock")
 public class StockInfoController {
     @Autowired
+    @Resource
     private IStockInfoService stockInfoService;
+
 
     @GetMapping("/allStockInfoData")
     public ResponseResult getDate(){
@@ -59,6 +65,7 @@ public class StockInfoController {
     @PostMapping("/add")
     public ResponseResult addRecord(@RequestBody stockInfo stock)
     {
+        stock.setStocktime(DateUtil.today());
         return ResponseResult.success(stockInfoService.save(stock));
     }
 
@@ -87,17 +94,14 @@ public class StockInfoController {
     public ResponseResult selectByPage(@RequestParam Integer pageNum,
                                        @RequestParam Integer pageSize,
                                        @RequestParam String pname,
-                                       @RequestParam String deposity){
+                                       @RequestParam String deposity,
+                                       @RequestParam String stocktime){
         QueryWrapper<stockInfo> queryWrapper = new QueryWrapper<stockInfo>().orderByDesc("stockid");
 
 
-        // 仅当 pname 非空且非空字符串时，添加模糊匹配条件
-        if (StringUtils.hasText(pname)) {
-            queryWrapper.like("pname", pname.trim());
-        }
-        if (StringUtils.hasText(deposity)) {
-            queryWrapper.like("deposity", deposity.trim());
-        }
+        queryWrapper.like(StrUtil.isNotBlank(pname), "pname", pname);
+        queryWrapper.like(StrUtil.isNotBlank(deposity), "deposity", deposity);
+        queryWrapper.like(StrUtil.isNotBlank(stocktime), "stocktime", stocktime);
         IPage<stockInfo> page =new Page<>(pageNum,pageSize);
         return ResponseResult.success(stockInfoService.page(page,queryWrapper));
     }
@@ -119,13 +123,8 @@ public class StockInfoController {
             queryWrapper.in("stockid",stockidsArr1);
         }else {
 
-            // 仅当 pname 非空且非空字符串时，添加模糊匹配条件
-            if (StringUtils.hasText(pname)) {
-                queryWrapper.like("pname", pname.trim());
-            }
-            if (StringUtils.hasText(deposity)) {
-                queryWrapper.like("deposity", deposity.trim());
-            }
+            queryWrapper.like(StrUtil.isNotBlank(pname), "pname", pname);
+            queryWrapper.like(StrUtil.isNotBlank(deposity), "deposity", deposity);
         }
         //全部导出
         list = stockInfoService.list(queryWrapper);//查询出当前deposityRecord表的所有数据
@@ -133,7 +132,7 @@ public class StockInfoController {
 
         //设置浏览器响应格式
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
-        response.setHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode("入库信息表","UTF-8") + ".xlsx");
+        response.setHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode("库存信息表","UTF-8") + ".xlsx");
 
         ServletOutputStream outputStream = response.getOutputStream();
         writer.flush(outputStream,true);
@@ -159,5 +158,27 @@ public class StockInfoController {
             return ResponseResult.error("批量导入数据出错");
         }
         return ResponseResult.success(saveBatch);
+    }
+/**
+ * 统计图数据
+ */
+    @GetMapping("/charts")
+    public ResponseResult charts(){
+        //包装折线图的数据
+        List<stockInfo> list = stockInfoService.list();//数据多要换一种方法
+        Set<String> dates = list.stream().map(stockInfo::getStocktime).collect(Collectors.toSet());//set是无序的,用list排序
+        List<String> dateList = CollUtil.newArrayList(dates);
+        dateList.sort(Comparator.naturalOrder());
+        List<Dict> linelist = new ArrayList<>();
+        for (String date :dateList){
+            //统计当日所有金额总数
+            BigDecimal sum = list.stream().filter(stockInfo -> stockInfo.getStocktime().equals(date))
+                    .map(stockInfo::getPrice).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+            Dict dict =Dict.create();
+            Dict line = dict.set("date", date).set("value", sum);
+            linelist.add(line);
+        }
+        return ResponseResult.success(linelist);
+
     }
 }

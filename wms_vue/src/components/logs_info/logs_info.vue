@@ -2,7 +2,7 @@
  <div>
   
   <div style="margin-top:20px; margin-bottom: 30px; display:flex;">
-      <el-input v-model="operation" placeholder="请输入操作名称" style="width:20%; margin-left: 10px"></el-input>
+      <el-input v-model="operation" placeholder="请输入操作模块" style="width:20%; margin-left: 10px"></el-input>
       <el-select v-model="type" placeholder="请选择操作类型" style="width:20%; margin-left: 10px">
         <el-option v-for="item in ['新增','修改','删除','注册','登录','批量删除']" :key="item" :label="item" :value="item"></el-option>
       </el-select>

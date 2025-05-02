@@ -16,15 +16,10 @@
             <el-menu-item index="/apply/move_apply"><i class="el-icon-sort"></i>库存转移申请</el-menu-item>
           </el-submenu>
 
-          <el-submenu index="/manager_in">
-            <template slot="title"><i class="el-icon-bottom-right"></i>入库管理</template>
-            <el-menu-item index="/manager_in/search_in"><i class="el-icon-search"></i>入库查询</el-menu-item>
-            <el-menu-item index="/manager_in/view_in" v-if="user.roleid!=1"><i class="el-icon-pie-chart"></i>入库可视化</el-menu-item>
-          </el-submenu>
-          <el-submenu index="/manager_out">
-            <template slot="title"><i class="el-icon-top-left"></i>出库管理</template>
-            <el-menu-item index="/manager_out/search_out"><i class="el-icon-search"></i>出库查询</el-menu-item>
-            <el-menu-item index="/manager_out/view_out" v-if="user.roleid!=1"><i class="el-icon-pie-chart"></i>出库可视化</el-menu-item>
+          <el-submenu index="/manager_record">
+            <template slot="title"><i class="el-icon-bottom-right"></i>货流管理</template>
+            <el-menu-item index="/manager_record/search_record"><i class="el-icon-search"></i>货流记录查询</el-menu-item>
+            <el-menu-item index="/manager_record/view_record" v-if="user.roleid!=1"><i class="el-icon-pie-chart"></i>记录统计</el-menu-item>
           </el-submenu>
           <el-submenu index="manager_store">
             <template slot="title"><i class="el-icon-shopping-cart-2"></i>库存管理</template>
@@ -34,8 +29,8 @@
           <el-menu-item index="/manager_personnel" v-if="user.roleid!=1">
             <template slot="title"><i class="el-icon-user"></i>人员管理</template>
           </el-menu-item>
-          <el-menu-item index="/addDeposity" v-if="user.roleid!=1">
-            <template slot="title"><i class="el-icon-house"></i>新建仓库</template>
+          <el-menu-item index="/manager_deposity" v-if="user.roleid!=1">
+            <template slot="title"><i class="el-icon-house"></i>仓库管理</template>
           </el-menu-item>
 
           <el-menu-item index="/myapplication">

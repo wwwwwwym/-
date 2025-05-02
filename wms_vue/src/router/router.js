@@ -15,18 +15,15 @@ import newPassword from '@/components/myinfo/newPassword.vue'
 import in_apply from '@/components/apply/in_apply.vue'
 import move_apply from '@/components/apply/move_apply.vue'
 
-import manager_in_search from '@/components/manager_in/search_in.vue'
-import manager_in_view from '@/components/manager_in/view_in.vue'
-
-import manager_out_search from '@/components/manager_out/search_out.vue'
-import manager_out_view from '@/components/manager_out/view_out.vue'
+import manager_record_search from '@/components/manager_record/search_record.vue'
+import manager_record_view from '@/components/manager_record/view_record.vue'
 
 import manager_store_search from '@/components/manager_store/search_store.vue'
 import manager_store_view from '@/components/manager_store/view_store.vue'
 
 import manager_personnel from '@/components/manager_personnel/manager_personnel.vue'
 
-import addDeposity from '@/components/manager_other/addDeposity.vue'
+import manager_deposity from '@/components/manager_deposity/search_deposity.vue'
 
 // import myapplication from '@/components/submit.vue'
 import myinfo from '@/components/myinfo/myinfo.vue'
@@ -91,25 +88,14 @@ const router = new VueRouter({// 生成一个路由实例
                 },
 
                 {//2-1
-                    name:'search_in',
-                    path:'/manager_in/search_in',
-                    component:manager_in_search
+                    name:'search_record',
+                    path:'/manager_record/search_record',
+                    component:manager_record_search
                 },
                 {//2-2
-                    name:'view_in',
-                    path:'/manager_in/view_in',
-                    component:manager_in_view
-                },
-
-                {//3-1
-                    name:'search_out',
-                    path:'/manager_out/search_out',
-                    component:manager_out_search
-                },
-                {//3-2
-                    name:'view_out',
-                    path:'/manager_out/view_out',
-                    component:manager_out_view
+                    name:'view_record',
+                    path:'/manager_record/view_record',
+                    component:manager_record_view
                 },
 
                 {//4-1
@@ -130,9 +116,9 @@ const router = new VueRouter({// 生成一个路由实例
                 },
 
                 {//6-2
-                    name:'addDeposity',
-                    path:'/addDeposity',
-                    component:addDeposity
+                    name:'manager_deposity',
+                    path:'/manager_deposity',
+                    component:manager_deposity
                 },
 
                 // {//7
