@@ -33,7 +33,7 @@ public class FileController {
             originalFilename = mainName + "_" + System.currentTimeMillis() + "." + extName;
         }
         File saveFile = new File(ROOT_PATH + File.separator + originalFilename);
-        System.out.println("文件保存路径：" + saveFile.getAbsolutePath());
+//        System.out.println("文件保存路径：" + saveFile.getAbsolutePath());
         file.transferTo(saveFile);
         String url= "http://localhost:9000/file/download/" + originalFilename;
 
@@ -43,31 +43,31 @@ public class FileController {
 
 
     @AuthAccess
-    @GetMapping("/download/{fileName}")
+    @GetMapping("/download/{fileName:.+}")
     public void download(@PathVariable String fileName, HttpServletResponse response) throws IOException {
 
         String filePath = ROOT_PATH + File.separator + fileName;
+//        System.out.println("尝试下载文件路径：" + filePath);
         if(!FileUtil.exist(filePath)){
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "File not found");
              return;
         }
 
         byte[] bytes = FileUtil.readBytes(filePath);
-        System.out.println("尝试下载文件路径：" + filePath);
-        try (ServletOutputStream outputStream = response.getOutputStream()) {
-            outputStream.write(bytes);
-            outputStream.flush();
-        } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error reading or writing file");
-            e.printStackTrace(); // 打印栈跟踪信息，帮助调试
-        }
+//        System.out.println("尝试下载文件路径：" + filePath);
+//        try (ServletOutputStream outputStream = response.getOutputStream()) {
+//            outputStream.write(bytes);
+//            outputStream.flush();
+//        } catch (Exception e) {
+//            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error reading or writing file");
+//            e.printStackTrace(); // 打印栈跟踪信息，帮助调试
+//        }
 
 
-//        byte[] bytes = FileUtil.readBytes(filePath);
-//        ServletOutputStream outputStream = response.getOutputStream();
-//        outputStream.write(bytes);//数组是一个字节数组
-//        outputStream.flush();
-//        outputStream.close();
+
+        ServletOutputStream outputStream = response.getOutputStream();
+        outputStream.write(bytes);//数组是一个字节数组
+        outputStream.flush();
+        outputStream.close();
 
     }
 }

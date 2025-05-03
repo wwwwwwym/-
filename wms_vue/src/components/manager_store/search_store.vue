@@ -46,7 +46,11 @@
     <el-table-column type="selection" width="60" align="center"> </el-table-column>
     <el-table-column prop="stockid" label="记录编号" width="90"> </el-table-column>
     <el-table-column prop="pname" label="产品名称" > </el-table-column>
-    <el-table-column prop="picture" label="产品图片" > </el-table-column>
+    <el-table-column label="产品图片" > 
+      <template v-slot="scope">
+        <el-image style="width: 80px; height: 80px" v-if="scope.row.picture" :src="scope.row.picture" :preview-src-list="[scope.row.picture]"></el-image>
+      </template>
+    </el-table-column>
     <el-table-column prop="deposity" label="现存仓库" width="90"> </el-table-column>
     <el-table-column prop="quantity" label="数量" width="90"> </el-table-column>
     <el-table-column prop="price" label="价格" width="90"> </el-table-column>
