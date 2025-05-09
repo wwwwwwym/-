@@ -49,20 +49,20 @@ public class DeposityController {
     /**
      * 删除
      */
-    @DeleteMapping("/delete/{id}")
-    public ResponseResult deleteUser(@PathVariable Integer id)
+    @DeleteMapping("/delete/{deposityid}")
+    public ResponseResult deleteUser(@PathVariable Integer deposityid)
 
     {
-        return ResponseResult.success(deposityService.removeById(id));
+        return ResponseResult.success(deposityService.removeById(deposityid));
     }
 
     /**
      * 批量删除
      */
     @DeleteMapping("/delete/batch")
-    public ResponseResult deleteUserBatch(@RequestBody List<Integer> ids)
+    public ResponseResult deleteUserBatch(@RequestBody List<Integer> deposityids)
     {
-        return ResponseResult.success(deposityService.removeByIds(ids));
+        return ResponseResult.success(deposityService.removeByIds(deposityids));
     }
 
     /**
@@ -87,14 +87,14 @@ public class DeposityController {
     @GetMapping("/export")
     public void exportData(@RequestParam(required = false) String dname,
                            @RequestParam(required = false) String address,
-                           @RequestParam(required = false) String ids,
+                           @RequestParam(required = false) String deposityids,
                            HttpServletResponse response) throws IOException {
         ExcelWriter writer = ExcelUtil.getWriter(true);
         QueryWrapper<Deposity> queryWrapper = new QueryWrapper<Deposity>();
 
         List<Deposity> list;
-        if(StrUtil.isNotBlank(ids)){
-            List<Integer> idsArr1 = Arrays.stream(ids.split(",")).map(Integer::valueOf).collect(Collectors.toList());//Stream流，把字符串list转成Integer的list
+        if(StrUtil.isNotBlank(deposityids)){
+            List<Integer> idsArr1 = Arrays.stream(deposityids.split(",")).map(Integer::valueOf).collect(Collectors.toList());//Stream流，把字符串list转成Integer的list
             queryWrapper.in("id",idsArr1);
         }else {
 

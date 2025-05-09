@@ -11,7 +11,7 @@ import lombok.Data;
 public class Deposity {
     @TableId(type = IdType.AUTO )
     @Alias("记录序号")
-    private Integer id;//记录id
+    private Integer deposityid;//记录id
     @Alias("仓库名称")
     private String dname;//仓库名称
     @Alias("仓库地址")

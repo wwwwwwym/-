@@ -11,10 +11,10 @@
       <el-button type="primary" style="margin-left: 10px" @click="reset"><i class="el-icon-refresh-right"></i> 重置</el-button>
   </div>
 
-
+<!-- 
   <div style="margin-top: 20px;margin-bottom: 10px">
     <el-button type="danger" plain @click="delBatch" v-if="user.roleid!=1">批量删除</el-button>
-  </div>
+  </div> -->
   
 
 <!-- 表单区域 -->
@@ -28,11 +28,11 @@
     <el-table-column prop="type" label="操作类型" > </el-table-column>
     <el-table-column prop="user" label="操作人" > </el-table-column>
     <el-table-column prop="time" label="操作时间" > </el-table-column>
-    <el-table-column fixed="right" label="操作" width="180">
+    <!-- <el-table-column fixed="right" label="操作" width="180">
       <template slot-scope="scope">
         <el-button type="text" size="medium" @click="del(scope.row.id)" v-if="user.roleid!=1">删除</el-button>
       </template>
-    </el-table-column>
+    </el-table-column> -->
   </el-table>
 
 
@@ -76,39 +76,39 @@ import request from '@/request/request'
       }
     },
     methods: {
-        delBatch(){
-        if(!this.ids.length)
-        {
-          this.$message.warning("请选择要删除的数据");
-          return
-        }
-        this.$confirm('您确认批量删除这些数据吗?', '确认删除', {type:"warning"}).then(() => {
-          this.$request.delete('/logs/delete/batch',{
-            data:this.ids
-          }).then(res =>{
-            if(res.code===0)
-            {
-              this.$message.success("批量删除成功");
-              this.load(1)
-            }else{
-              this.$message.error(res.msg);
-            }
-          })
-        }).catch(() => {})
-      },
-        del(id){
-        this.$confirm('您确认删除吗?', '确认删除', {type:"warning"}).then(() => {
-          this.$request.delete('/logs/delete/'+ id).then(res =>{
-            if(res.code===0)
-            {
-              this.$message.success("删除成功");
-              this.load(1)
-            }else{
-              this.$message.error(res.msg);
-            }
-          })
-        }).catch(() => {})
-      },
+      //   delBatch(){
+      //   if(!this.ids.length)
+      //   {
+      //     this.$message.warning("请选择要删除的数据");
+      //     return
+      //   }
+      //   this.$confirm('您确认批量删除这些数据吗?', '确认删除', {type:"warning"}).then(() => {
+      //     this.$request.delete('/logs/delete/batch',{
+      //       data:this.ids
+      //     }).then(res =>{
+      //       if(res.code===0)
+      //       {
+      //         this.$message.success("批量删除成功");
+      //         this.load(1)
+      //       }else{
+      //         this.$message.error(res.msg);
+      //       }
+      //     })
+      //   }).catch(() => {})
+      // },
+      //   del(id){
+      //   this.$confirm('您确认删除吗?', '确认删除', {type:"warning"}).then(() => {
+      //     this.$request.delete('/logs/delete/'+ id).then(res =>{
+      //       if(res.code===0)
+      //       {
+      //         this.$message.success("删除成功");
+      //         this.load(1)
+      //       }else{
+      //         this.$message.error(res.msg);
+      //       }
+      //     })
+      //   }).catch(() => {})
+      // },
       reset(){
         this.operation=''
         this.type=''

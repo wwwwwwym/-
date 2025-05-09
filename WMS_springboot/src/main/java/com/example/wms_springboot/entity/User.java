@@ -28,9 +28,9 @@ public class User {
     @Alias("用户密码")
     private String password;//用户密码
     @Alias("用户角色")
-    private Integer roleid;//角色id
+    private String role;//角色
     @Alias("入职时间")
-    private Date time;//入职时间
+    private String time;//入职时间
     @Alias("负责仓库")
     private String deposity;//负责仓库
     @Alias("用户电话")
@@ -39,5 +39,4 @@ public class User {
 
     @TableField(exist = false)
     private String token;
-
 }

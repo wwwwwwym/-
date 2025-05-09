@@ -2,6 +2,7 @@ package com.example.wms_springboot.controller;
 
 
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
@@ -106,6 +107,7 @@ public class UserController {
     @PostMapping("/add")
     public ResponseResult addUser(@RequestBody User user)
     {
+        user.setTime(DateUtil.today());
         return ResponseResult.success(userService.userRegister(user));
     }
 

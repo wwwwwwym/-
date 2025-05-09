@@ -30,7 +30,7 @@
 
   <div style="margin-top: 20px;margin-bottom: 10px">
     <el-button type="primary" plain @click="handleAdd">新增</el-button>
-    <el-button type="danger" plain @click="delBatch" v-if="user.roleid!=1">批量删除</el-button>
+    <el-button type="danger" plain @click="delBatch" v-if="user.role!='普通员工'">批量删除</el-button>
     <el-button type="primary" plain @click="exportData">批量导出</el-button>
     <el-upload action="http://localhost:9000/stock/import" :headers="{token:user.token}" :on-success="handleImport" style="display:inline-block ;margin-left: 10px" :show-file-list="false">
       <el-button type="primary" plain>批量导入</el-button>
@@ -58,7 +58,7 @@
     <el-table-column fixed="right" label="操作" width="">
       <template slot-scope="scope">
         <el-button  type="text" size="medium" @click="handleEdit(scope.row)">编辑</el-button>
-        <el-button type="text" size="medium" @click="del(scope.row.stockid)" v-if="user.roleid!=1">删除</el-button>
+        <el-button type="text" size="medium" @click="del(scope.row.stockid)" v-if="user.role!='普通员工'">删除</el-button>
       </template>
     </el-table-column>
   </el-table>

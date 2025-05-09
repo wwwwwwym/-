@@ -29,7 +29,7 @@
     <el-table-column type="selection" width="55" align="center"> </el-table-column>
     <el-table-column prop="userid" label="用户id"> </el-table-column>
     <el-table-column prop="username" label="用户名称" > </el-table-column>
-    <el-table-column prop="roleid" label="角色id" > </el-table-column>
+    <el-table-column prop="role" label="角色" > </el-table-column>
     <el-table-column prop="deposity" label="负责仓库" > </el-table-column>
     <el-table-column prop="telephone" label="电话号码" > </el-table-column>
     <el-table-column prop="time" label="入职时间" :formatter="formatTime"> </el-table-column>
@@ -67,9 +67,15 @@
         <el-form-item label="电话" prop="telephone">
             <el-input placeholder="请输入电话" v-model="form.telephone"></el-input>
         </el-form-item>
-        <el-form-item label="角色" prop="roleid">
-            <el-input placeholder="请输入角色" v-model="form.roleid" ></el-input>
+        <!-- <el-form-item label="角色" prop="role">
+            <el-input placeholder="请输入角色" v-model="form.role" ></el-input>
+        </el-form-item> -->
+        <el-form-item label="用户角色" prop="role">
+            <el-select v-model="form.role" placeholder="请选择角色" style="width:100%">
+              <el-option v-for="item in ['普通员工','管理员','超管']" :key="item" :label="item" :value="item"></el-option>
+            </el-select>
         </el-form-item>
+        
         <el-form-item label="负责仓库" prop="deposity">
             <el-input placeholder="请输入负责仓库" v-model="form.deposity" ></el-input>
         </el-form-item>
@@ -92,8 +98,8 @@
         <el-form-item label="电话" prop="telephone">
             <el-input placeholder="请输入电话" v-model="form.telephone"></el-input>
         </el-form-item>
-        <el-form-item label="角色" prop="roleid">
-            <el-input placeholder="请输入角色" v-model="form.roleid" ></el-input>
+        <el-form-item label="角色" prop="role">
+            <el-input placeholder="请输入角色" v-model="form.role" ></el-input>
         </el-form-item>
         <el-form-item label="负责仓库" prop="deposity">
             <el-input placeholder="请输入负责仓库" v-model="form.deposity" ></el-input>
@@ -168,7 +174,7 @@ export default {
           username: [
             {required: true, validator: checkNull, trigger: 'blur' }
           ],
-          roleid: [
+          role: [
             {required: true, validator: checkNull, trigger: 'blur' }
           ],
           deposity: [

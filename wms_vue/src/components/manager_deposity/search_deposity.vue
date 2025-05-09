@@ -25,7 +25,7 @@
     @selection-change="handleSelectionChange">
     <!-- 多选 -->
     <el-table-column type="selection" width="60" align="center"> </el-table-column>
-    <el-table-column prop="id" label="记录编号" > </el-table-column>
+    <el-table-column prop="deposityid" label="仓库编号" > </el-table-column>
     <el-table-column prop="dname" label="仓库名称" > </el-table-column>
     <el-table-column prop="address" label="仓库地址" > </el-table-column>
     <el-table-column prop="introduce" label="仓库简介" > </el-table-column>
@@ -108,9 +108,9 @@ import request from '@/request/request'
         pageNum: 1,//当前页码
         pageSize: 5,//每页个数
         dname: '',
-        id: '',
+        deposityid: '',
         total: 0,
-        ids: [],
+        deposityids: [],
         user:JSON.parse(localStorage.getItem('user') || '{}'),
         address: '',
         introduce: '', 
@@ -127,14 +127,14 @@ import request from '@/request/request'
     },
     methods: {
         delBatch(){
-        if(!this.ids.length)
+        if(!this.deposityids.length)
         {
           this.$message.warning("请选择要删除的数据");
           return
         }
         this.$confirm('您确认批量删除这些数据吗?', '确认删除', {type:"warning"}).then(() => {
           this.$request.delete('/deposity/delete/batch',{
-            data:this.ids
+            data:this.deposityids
           }).then(res =>{
             if(res.code===0)
             {
@@ -146,9 +146,9 @@ import request from '@/request/request'
           })
         }).catch(() => {})
       },
-        del(id){
+        del(deposityid){
         this.$confirm('您确认删除吗?', '确认删除', {type:"warning"}).then(() => {
-          this.$request.delete('/deposity/delete/'+ id).then(res =>{
+          this.$request.delete('/deposity/delete/'+ deposityid).then(res =>{
             if(res.code===0)
             {
               this.$message.success("删除成功");
@@ -174,15 +174,15 @@ import request from '@/request/request'
         }
       },
       exportData(){//批量导出
-      if(!this.ids.length){//没有选择行的时候，全部导出，或者根据搜索条件查询到的数据全部导出
+      if(!this.deposityids.length){//没有选择行的时候，全部导出，或者根据搜索条件查询到的数据全部导出
         window.open('http://localhost:9000/deposity/export?token='+ this.user.token + "&dname="+this.dname + "&address="+this.address )
       }else{
-        let idsStr = this.ids.join(',')
+        let idsStr = this.deposityids.join(',')
         window.open('http://localhost:9000/deposity/export?token='+ this.user.token + "&ids="+idsStr)//传了选中的行
       }
       },
       handleSelectionChange(rows){   
-        this.ids=rows.map(v=>v.id)//把对象数组变成数字数组,v.recordId与前端获取的row的字段名一致，刚开始写recoord_id一直不成功
+        this.deposityids=rows.map(v=>v.deposityid)//把对象数组变成数字数组,v.recordId与前端获取的row的字段名一致，刚开始写recoord_id一直不成功
       },
       load(pageNum){//分页查询
       if(pageNum)

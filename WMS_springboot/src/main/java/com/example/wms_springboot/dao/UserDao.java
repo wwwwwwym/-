@@ -36,4 +36,19 @@ public interface UserDao extends BaseMapper<User> {
 ////    批量删除
 ////    @Delete("delete from user where userid in   ")
 ////    int removeUserBatchByUserId(List<Integer> userids);
+
+//    @Select("select * from user")
+//    @Results(
+//            {
+//                    @Result(column = "userid",property = "userid"),
+//                    @Result(column = "username",property = "username"),
+//                    @Result(column = "deposity",property = "deposity"),
+//                    @Result(column = "time",property = "time"),
+//                    @Result(column = "telephone",property = "telephone"),
+//                    @Result(column = "roleid",property = "roleid"),
+//                    @Result(column = "roleid",property = "rolename",javaType = String.class),
+//                            many= @Many(select = "")
+//            }
+//    )
+//    List<User> findAllUser();
 }

@@ -19,17 +19,17 @@
           <el-submenu index="/manager_record">
             <template slot="title"><i class="el-icon-bottom-right"></i>货流管理</template>
             <el-menu-item index="/manager_record/search_record"><i class="el-icon-search"></i>货流记录查询</el-menu-item>
-            <el-menu-item index="/manager_record/view_record" v-if="user.roleid!=1"><i class="el-icon-pie-chart"></i>记录统计</el-menu-item>
+            <el-menu-item index="/manager_record/view_record" v-if="user.role!='普通员工'"><i class="el-icon-pie-chart"></i>记录统计</el-menu-item>
           </el-submenu>
           <el-submenu index="manager_store">
             <template slot="title"><i class="el-icon-shopping-cart-2"></i>库存管理</template>
             <el-menu-item index="/manager_store/search_store"><i class="el-icon-search"></i>库存查询</el-menu-item>
-            <el-menu-item index="/manager_store/view_store" v-if="user.roleid!=1"><i class="el-icon-pie-chart"></i>库存可视化</el-menu-item>
+            <el-menu-item index="/manager_store/view_store" v-if="user.role!='普通员工'"><i class="el-icon-pie-chart"></i>库存可视化</el-menu-item>
           </el-submenu>
-          <el-menu-item index="/manager_personnel" v-if="user.roleid!=1">
+          <el-menu-item index="/manager_personnel" v-if="user.role!='普通员工'">
             <template slot="title"><i class="el-icon-user"></i>人员管理</template>
           </el-menu-item>
-          <el-menu-item index="/manager_deposity" v-if="user.roleid!=1">
+          <el-menu-item index="/manager_deposity" v-if="user.role!='普通员工'">
             <template slot="title"><i class="el-icon-house"></i>仓库管理</template>
           </el-menu-item>
 
@@ -39,8 +39,8 @@
           <el-menu-item index="/myinfo">
             <template slot="title"><i class="el-icon-user"></i>个人中心</template>
           </el-menu-item>
-          <el-menu-item index="/logs_info">
-            <template slot="title"><i class="el-icon-finished"></i>系统日志</template>
+          <el-menu-item index="/logs_info"  v-if="user.role=='超管'">
+            <template slot="title" ><i class="el-icon-finished"></i>系统日志</template>
           </el-menu-item>
         </el-menu>
       </el-aside>
