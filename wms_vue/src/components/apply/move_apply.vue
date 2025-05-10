@@ -9,38 +9,35 @@
 
 <!-- 表单区域 -->
 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" size="small" style="width:600px">
-  <el-form-item label="产品名称" prop="name">
-    <el-input v-model="ruleForm.name"></el-input>
+  <el-form-item label="产品名称" prop="pname">
+    <el-input v-model="ruleForm.pname"></el-input>
   </el-form-item>
-  <el-form-item label="产品数量" prop="number">
-    <el-input v-model.number="ruleForm.number" type="number" min="0"></el-input>
+  <el-form-item label="产品数量" prop="quantity">
+    <el-input v-model.number="ruleForm.quantity" type="number" min="0"></el-input>
   </el-form-item>
   <el-form-item label="产品价格" prop="price">
     <el-input v-model.number="ruleForm.price" ></el-input>
   </el-form-item>
-  <el-form-item label="转出仓库" prop="region">
-    <el-select v-model="ruleForm.region" placeholder="请选择仓库名称">
-      <el-option label="仓库一" value="shanghai"></el-option>
-      <el-option label="仓库二" value="beijing"></el-option>
+  <el-form-item label="原仓库" prop="deposityOld">
+    <el-select v-model="ruleForm.deposityOld" placeholder="请选择仓库名称">
+      <el-option v-for="item in ['仓库1','仓库2','仓库3']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
-  <el-form-item label="转入仓库" prop="region">
-    <el-select v-model="ruleForm.region" placeholder="请选择仓库名称">
-      <el-option label="仓库一" value="shanghai"></el-option>
-      <el-option label="仓库二" value="beijing"></el-option>
+  <el-form-item label="新仓库" prop="deposityNew">
+    <el-select v-model="ruleForm.deposityNew" placeholder="请选择仓库名称">
+      <el-option v-for="item in ['仓库1','仓库2','仓库3']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
-    <el-form-item label="审核人" prop="people">
-    <el-select v-model="ruleForm.people" placeholder="请选择审核人">
-      <el-option label="审核人一" value="shanghai"></el-option>
-      <el-option label="审核人二" value="beijing"></el-option>
+    <el-form-item label="审核人" prop="reviewId">
+    <el-select v-model="ruleForm.reviewId" placeholder="请选择审核人">
+      <el-option v-for="item in ['111','222','333']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="申请备注" >
-    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+    <el-input type="textarea" v-model="ruleForm.applyRemark"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="submitForm('ruleForm')">提交申请</el-button>
+    <el-button type="primary" @click="apply">提交申请</el-button>
     <el-button @click="resetForm('ruleForm')">重置</el-button>
   </el-form-item>
 </el-form>
@@ -59,19 +56,25 @@
     data () {
        return {
         active: 0,
+        user:JSON.parse(localStorage.getItem('user') || '{}'),
         ruleForm: {
-          name: '',
-          number: '',
+          pname: '',
+          type: '',
+          deposityOld:'',
+          deposityNew: '',
+          quantity: '',
           price: '',
-          region: '',
-          people: '',
-          desc: ''
+          state:'待审核',
+          applyId:'',
+          applyTime: '',
+          applyRemark: '',
+          reviewId: '',
         },
         rules: {
-          name: [
+          pname: [
             { required: true, message: '请输入产品名称', trigger: 'blur' }, 
         ],
-          number:[
+          quantity:[
             { required: true, message: '请输入产品数量', trigger: 'blur' },
             { validator: (rule, value, callback) => {
                 if (typeof value !== 'number' || isNaN(value)) {
@@ -97,10 +100,13 @@
               },
             trigger: ['blur'] }
           ],
-          region: [
-            { required: true, message: '请选择活动区域', trigger: 'change' }
+          deposityNew: [
+            { required: true, message: '请选择仓库', trigger: 'change' }
           ],
-          people: [
+          deposityOld: [
+            { required: true, message: '请选择仓库', trigger: 'change' }
+          ],
+          reviewId: [
             { required: true, message: '请选择审核人', trigger: 'change' }
           ],
         }
@@ -115,16 +121,25 @@
         next() {
             this.active=1;
         },
-        submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('提交成功');
-            this.active=1;
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
+        apply(){
+         this.$refs.ruleForm.validate((valid) => {
+          this.ruleForm.type='调货单';
+          this.ruleForm.applyId=this.user.userid;
+          console.log(this.ruleForm)
+                if(valid){
+                    this.$request.post('/recordIn/add',this.ruleForm).then(res => {
+                      if(res.code===0)
+                      {
+                        
+                        this.$message.success("提交成功");
+                        this.active=1;
+                      }else{
+                        this.$message.error(res.msg);
+                      }
+                    })
+                }
+            })
+
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();

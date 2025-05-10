@@ -9,35 +9,33 @@
 
 <!-- 表单区域 -->
 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" size="small" style="width:600px">
-  <el-form-item label="产品名称" prop="name">
-    <el-input v-model="ruleForm.name"></el-input>
+  <el-form-item label="产品名称" prop="pname">
+    <el-input v-model="ruleForm.pname"></el-input>
   </el-form-item>
-  <el-form-item label="产品数量" prop="number">
-    <el-input v-model.number="ruleForm.number" type="number" min="0"></el-input>
+  <el-form-item label="产品数量" prop="quantity">
+    <el-input v-model.number="ruleForm.quantity" type="number" min="0"></el-input>
   </el-form-item>
   <el-form-item label="产品价格" prop="price">
     <el-input v-model.number="ruleForm.price" ></el-input>
   </el-form-item>
-  <el-form-item label="操作仓库" prop="region">
-    <el-select v-model="ruleForm.region" placeholder="请选择仓库名称">
-      <el-option label="仓库一" value="shanghai"></el-option>
-      <el-option label="仓库二" value="beijing"></el-option>
+  <el-form-item label="仓库" prop="deposityNew">
+    <el-select v-model="ruleForm.deposityNew" placeholder="请选择仓库名称">
+      <el-option v-for="item in ['仓库1','仓库2','仓库3']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
-  <el-form-item label="操作类型" prop="in_out">
-    <el-radio-group v-model="ruleForm.in_out">
-      <el-radio label="出库"></el-radio>
-      <el-radio label="入库"></el-radio>
+  <el-form-item label="操作类型" prop="type">
+    <el-radio-group v-model="ruleForm.type">
+      <el-radio label="出货单"></el-radio>
+      <el-radio label="进货单"></el-radio>
     </el-radio-group>
   </el-form-item>
-    <el-form-item label="审核人" prop="people">
-    <el-select v-model="ruleForm.people" placeholder="请选择审核人">
-      <el-option label="审核人一" value="shanghai"></el-option>
-      <el-option label="审核人二" value="beijing"></el-option>
+    <el-form-item label="审核人" prop="reviewId">
+    <el-select v-model="ruleForm.reviewId" placeholder="请选择审核人">
+      <el-option v-for="item in ['111','222','333']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="申请备注" >
-    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+    <el-input type="textarea" v-model="ruleForm.applyRemark"></el-input>
   </el-form-item>
   <el-form-item>
     <el-button type="primary" @click="apply">提交申请</el-button>
@@ -59,20 +57,27 @@
     data () {
        return {
         active: 0,
+        user:JSON.parse(localStorage.getItem('user') || '{}'),
         ruleForm: {
-          name: '',
-          number: '',
+          pname: '',
+          type: '',
+          // deposityOld:this.user.deposity,
+          deposityOld:'',
+          deposityNew: '',
+          quantity: '',
           price: '',
-          region: '',
-          in_out: '',
-          people: '',
-          desc: ''
+          state:'待审核',
+          // applyId:this.user.userid,
+          applyId:'',
+          applyTime: '',
+          applyRemark: '',
+          reviewId: '',
         },
         rules: {
-          name: [
+          pname: [
             { required: true, message: '请输入产品名称', trigger: 'blur' }, 
         ],
-          number:[
+          quantity:[
             { required: true, message: '请输入产品数量', trigger: 'blur' },
             { validator: (rule, value, callback) => {
                 if (typeof value !== 'number' || isNaN(value)) {
@@ -97,14 +102,14 @@
                 }
               },
             trigger: ['blur'] }
-          ],
-          region: [
+          ],    
+          deposityNew: [
             { required: true, message: '请选择仓库', trigger: 'change' }
           ],
-          in_out: [
+          type: [
             { required: true, message: '请选择操作类型', trigger: 'change' }
           ],
-          people: [
+          reviewId: [ 
             { required: true, message: '请选择审核人', trigger: 'change' }
           ],
         }
@@ -121,13 +126,14 @@
         },
         apply(){
          this.$refs.ruleForm.validate((valid) => {
+          this.ruleForm.deposityOld=this.user.deposity;
+          this.ruleForm.applyId=this.user.userid;
+          console.log(this.ruleForm)
                 if(valid){
-                    this.$request.post({
-                      url:this.ruleForm.in_out==1? '/recordIn/addRecordIn':'/recordOut/addRecordOut',
-                      data: this.ruleForm
-                    }).then(res => {
+                    this.$request.post('/recordIn/add',this.ruleForm).then(res => {
                       if(res.code===0)
                       {
+                        
                         this.$message.success("提交成功");
                         this.active=1;
                       }else{
@@ -137,7 +143,7 @@
                 }
             })
 
-      },
+        },
         resetForm(formName) {
             this.$refs[formName].resetFields();
         }

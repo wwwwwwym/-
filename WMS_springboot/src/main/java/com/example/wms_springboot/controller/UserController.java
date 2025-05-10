@@ -130,6 +130,7 @@ public class UserController {
     /**
      * 批量删除
      */
+    @Logs(operation = "人员管理",type = logType.DELETE_BATCH)
     @DeleteMapping("/delete/batch")
     public ResponseResult deleteUserBatch(@RequestBody List<Integer> userids)
     {
@@ -172,6 +173,7 @@ public class UserController {
     /**
      * 批量导出数据
      */
+    @Logs(operation = "人员管理",type = logType.EXPORT)
     @GetMapping("/export")
     public void exportData(@RequestParam(required = false) String username,
                            @RequestParam(required = false) String deposity,
@@ -218,6 +220,7 @@ public class UserController {
     /**
      * 数据批量导入，与文件上传类似
      */
+    @Logs(operation = "人员管理",type = logType.IMPORT)
     @PostMapping("/import")
     public ResponseResult importData(MultipartFile file) throws IOException {
         ExcelReader reader = ExcelUtil.getReader(file.getInputStream());

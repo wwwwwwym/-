@@ -20,7 +20,12 @@ public class RecordInImpl extends ServiceImpl<RecordInDao, recordIn> implements 
     public List<recordIn> findAllRecordIn(){
 
         return recordIndao.selectList(new QueryWrapper<recordIn>()
-                .orderByDesc("record_id"));
+                .eq("type","进货单"));
+    }
+    public List<recordIn> findAllRecordOut(){
+
+        return recordIndao.selectList(new QueryWrapper<recordIn>()
+                .eq("type","出货单"));
     }
 
 }

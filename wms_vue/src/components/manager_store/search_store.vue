@@ -80,17 +80,6 @@
 <!-- 新增弹出框 -->
 <el-dialog title="新增产品" :visible.sync="addFormVisible" width="30%">
     <el-form :model="form" :rules="rules" label-width="80px" style="padding:20px" ref="form" >
-      <div style="margin:15px ;text-align:center">
-        <el-upload
-          class="avatar-uploader"
-          action="https://localhost:9000/file/upload"
-          :headers="{ token:user.token }"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess">
-          <img v-if="form.picture" :src="form.picture" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
-      </div>
         <el-form-item label="现存仓库" prop="deposity">
             <el-input placeholder="请输入现存仓库" v-model="form.deposity" ></el-input>
         </el-form-item>
@@ -103,6 +92,17 @@
         <el-form-item label="价格" prop="price">
             <el-input placeholder="请输入产品单价" v-model.number="form.price" ></el-input>
         </el-form-item>
+        <el-form-item label="产品图片" prop="picture" style="text-align:left"> 
+          <el-upload
+            class="picture-uploader"
+            action="http://localhost:9000/file/upload"
+            :headers="{ token:user.token }"
+            :file-list="form.picture ? [form.picture] : []"
+            list-type="picture"
+            :on-success="handleAvatarSuccess">
+            <el-button type="primary">上传图片</el-button>
+          </el-upload>
+        </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
         <el-button @click="addFormVisible = false">取 消</el-button>
@@ -113,10 +113,10 @@
 <!-- 编辑弹出框 -->
 <el-dialog title="编辑信息" :visible.sync="editFormVisible" width="30%">
     <el-form :model="form" :rules="rules" label-width="80px" style="padding:20px" ref="form" >
-      <div style="margin:15px ;text-align:center">
+      <div style="margin:25px ;text-align:center">
         <el-upload
           class="avatar-uploader"
-          action="https://localhost:9000/file/upload"
+          action="http://localhost:9000/file/upload"
           :headers="{ token:user.token }"
           :show-file-list="false"
           :on-success="handleAvatarSuccess">
@@ -220,10 +220,11 @@ import request from '@/request/request'
       }
     },
     methods: {
-      // handleAvatarSuccess(response,file,fileList){
-      //   this.form.picture = response.data
+      handleAvatarSuccess(response){
+        this.form.picture = response.data
+        console.log(response.data)
 
-      // },
+      },
         delBatch(){
         if(!this.stockids.length)
         {
@@ -362,18 +363,17 @@ import request from '@/request/request'
 .title{
   text-align:left;
 }
-.avatar-uploader .el-upload {
+ ::v-deep .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    width:100%
   }
-  .avatar-uploader .el-upload:hover {
+   ::v-deep .avatar-uploader .el-upload:hover {
     border-color: #409EFF;
   }
-  .avatar-uploader-icon {
+   ::v-deep .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
     width: 178px;
@@ -381,7 +381,7 @@ import request from '@/request/request'
     line-height: 178px;
     text-align: center;
   }
-  .avatar {
+   ::v-deep .avatar {
     width: 178px;
     height: 178px;
     display: block;

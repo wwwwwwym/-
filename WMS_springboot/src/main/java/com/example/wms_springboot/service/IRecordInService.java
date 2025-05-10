@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface IRecordInService extends IService<recordIn> {
     List<recordIn> findAllRecordIn();
+
+    List<recordIn> findAllRecordOut();
 }

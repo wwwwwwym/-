@@ -10,6 +10,7 @@ import cn.hutool.poi.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.wms_springboot.config.Logs;
 import com.example.wms_springboot.entity.User;
 import com.example.wms_springboot.entity.recordIn;
 import com.example.wms_springboot.entity.stockInfo;
@@ -19,6 +20,7 @@ import com.example.wms_springboot.service.IStockInfoService;
 import com.example.wms_springboot.utils.ResponseResult;
 import com.example.wms_springboot.utils.ResultCode;
 import com.example.wms_springboot.utils.TokenUtils;
+import com.example.wms_springboot.utils.logType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +56,7 @@ public class StockInfoController {
     /**
      * 修改
      */
+    @Logs(operation = "库存管理",type = logType.UPDATE)
     @PutMapping("/update")
     public ResponseResult updateRecord(@RequestBody stockInfo stock)
     {
@@ -62,6 +65,7 @@ public class StockInfoController {
     /**
      * 新增
      */
+    @Logs(operation = "库存管理",type = logType.ADD)
     @PostMapping("/add")
     public ResponseResult addRecord(@RequestBody stockInfo stock)
     {
@@ -72,6 +76,7 @@ public class StockInfoController {
     /**
      * 删除
      */
+    @Logs(operation = "库存管理",type = logType.DELETE)
     @DeleteMapping("/delete/{stockid}")
     public ResponseResult deleteUser(@PathVariable Integer stockid)
     {
@@ -81,6 +86,7 @@ public class StockInfoController {
     /**
      * 批量删除
      */
+    @Logs(operation = "库存管理",type = logType.DELETE_BATCH)
     @DeleteMapping("/delete/batch")
     public ResponseResult deleteUserBatch(@RequestBody List<Integer> stockid)
     {
@@ -109,6 +115,7 @@ public class StockInfoController {
     /**
      * 批量导出数据
      */
+    @Logs(operation = "库存管理",type = logType.EXPORT)
     @GetMapping("/export")
     public void exportData(@RequestParam(required = false) String pname,
                            @RequestParam(required = false) String deposity,
@@ -144,6 +151,7 @@ public class StockInfoController {
     /**
      * 数据批量导入，与文件上传类似
      */
+    @Logs(operation = "库存管理",type = logType.IMPORT)
     @PostMapping("/import")
     public ResponseResult importData(MultipartFile file) throws IOException {
         ExcelReader reader = ExcelUtil.getReader(file.getInputStream());

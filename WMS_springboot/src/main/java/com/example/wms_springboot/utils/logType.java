@@ -6,6 +6,9 @@ public enum logType {
     ADD("新增"),
     UPDATE("修改"),
     DELETE("删除"),
+    DELETE_BATCH("批量删除"),
+    EXPORT("批量导出"),
+    IMPORT("批量导入"),
     LOGIN("登录"),
     REGISTER("注册");
 

@@ -11,9 +11,11 @@ import cn.hutool.poi.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.wms_springboot.config.Logs;
 import com.example.wms_springboot.entity.recordIn;
 import com.example.wms_springboot.service.IRecordInService;
 import com.example.wms_springboot.utils.ResponseResult;
+import com.example.wms_springboot.utils.logType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -35,10 +37,18 @@ public class RecordInController {
     @Autowired
     private IRecordInService recordInService;
 
-    @GetMapping("/allRecordInData")
-    public ResponseResult getDate(){
+    @GetMapping("/allInData")
+    public ResponseResult getInDate(){
 
         List <recordIn> all=recordInService.findAllRecordIn();
+        return ResponseResult.success(all);
+//        return ResponseResult.success(recordInService.findAllRecordIn());
+
+    }
+    @GetMapping("/allOutData")
+    public ResponseResult getOutDate(){
+
+        List <recordIn> all=recordInService.findAllRecordOut();
         return ResponseResult.success(all);
 //        return ResponseResult.success(recordInService.findAllRecordIn());
 
@@ -47,6 +57,7 @@ public class RecordInController {
     /**
      * 修改
      */
+    @Logs(operation = "货流管理",type = logType.UPDATE)
     @PutMapping("/update")
     public ResponseResult updateRecord(@RequestBody recordIn record)
     {
@@ -55,11 +66,12 @@ public class RecordInController {
     /**
      * 新增
      */
+    @Logs(operation = "货流管理",type = logType.ADD)
     @PostMapping("/add")
     public ResponseResult addRecord(@RequestBody recordIn record)
     {
         record.setApplyTime(DateUtil.today());
-        record.setReviewTime(DateUtil.today());
+//        record.setReviewTime(DateUtil.today());
 //        record.setNo(IdUtil.fastSimpleUUID());订单编号
         return ResponseResult.success(recordInService.save(record));
     }
@@ -106,6 +118,7 @@ public class RecordInController {
     /**
      * 批量导出数据
      */
+    @Logs(operation = "货流管理",type = logType.EXPORT)
     @GetMapping("/export")
     public void exportData(@RequestParam(required = false) String pname,
                            @RequestParam(required = false) String deposityIn,
@@ -145,6 +158,7 @@ public class RecordInController {
     /**
      * 数据批量导入，与文件上传类似
      */
+    @Logs(operation = "货流管理",type = logType.IMPORT)
     @PostMapping("/import")
     public ResponseResult importData(MultipartFile file) throws IOException {
         ExcelReader reader = ExcelUtil.getReader(file.getInputStream());

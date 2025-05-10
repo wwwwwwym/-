@@ -7,9 +7,11 @@ import cn.hutool.poi.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.wms_springboot.config.Logs;
 import com.example.wms_springboot.entity.Deposity;
 import com.example.wms_springboot.service.IDeposityService;
 import com.example.wms_springboot.utils.ResponseResult;
+import com.example.wms_springboot.utils.logType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +34,7 @@ public class DeposityController {
     /**
      * 修改
      */
+    @Logs(operation = "仓库管理",type = logType.UPDATE)
     @PutMapping("/update")
     public ResponseResult updateRecord(@RequestBody Deposity deposity)
     {
@@ -40,6 +43,7 @@ public class DeposityController {
     /**
      * 新增
      */
+    @Logs(operation = "仓库管理",type = logType.ADD)
     @PostMapping("/add")
     public ResponseResult addRecord(@RequestBody Deposity deposity)
     {
@@ -49,6 +53,7 @@ public class DeposityController {
     /**
      * 删除
      */
+    @Logs(operation = "仓库管理",type = logType.DELETE)
     @DeleteMapping("/delete/{deposityid}")
     public ResponseResult deleteUser(@PathVariable Integer deposityid)
 
@@ -59,6 +64,7 @@ public class DeposityController {
     /**
      * 批量删除
      */
+    @Logs(operation = "仓库管理",type = logType.DELETE_BATCH)
     @DeleteMapping("/delete/batch")
     public ResponseResult deleteUserBatch(@RequestBody List<Integer> deposityids)
     {
@@ -84,6 +90,7 @@ public class DeposityController {
     /**
      * 批量导出数据
      */
+    @Logs(operation = "仓库管理",type = logType.EXPORT)
     @GetMapping("/export")
     public void exportData(@RequestParam(required = false) String dname,
                            @RequestParam(required = false) String address,
@@ -119,6 +126,7 @@ public class DeposityController {
     /**
      * 数据批量导入，与文件上传类似
      */
+    @Logs(operation = "仓库管理",type = logType.IMPORT)
     @PostMapping("/import")
     public ResponseResult importData(MultipartFile file) throws IOException {
         ExcelReader reader = ExcelUtil.getReader(file.getInputStream());
