@@ -64,7 +64,7 @@ import request from '@/request/request'
         value1: '',
         tableData: [],
         pageNum: 1,//当前页码
-        pageSize: 5,//每页个数
+        pageSize: 10,//每页个数
         operation: '',
         id: '',
         total: 0,

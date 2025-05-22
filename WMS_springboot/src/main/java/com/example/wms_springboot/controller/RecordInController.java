@@ -37,20 +37,47 @@ public class RecordInController {
     @Autowired
     private IRecordInService recordInService;
 
-    @GetMapping("/allInData")
-    public ResponseResult getInDate(){
+/**
+ * 获取审核人为当前用户的未审核申请
+ */
+    @GetMapping("/allPendingData")
+    public ResponseResult getPendingDate(){
 
-        List <recordIn> all=recordInService.findAllRecordIn();
+        List <recordIn> all=recordInService.findUserRecordPending();
         return ResponseResult.success(all);
 //        return ResponseResult.success(recordInService.findAllRecordIn());
 
     }
-    @GetMapping("/allOutData")
-    public ResponseResult getOutDate(){
 
-        List <recordIn> all=recordInService.findAllRecordOut();
+    /**
+     * 获取审核人为当前用户的已完成申请
+     */
+    @GetMapping("/allCompletedData")
+    public ResponseResult getCompletedDate(){
+
+        List <recordIn> all=recordInService.findUserRecordCompleted();
         return ResponseResult.success(all);
-//        return ResponseResult.success(recordInService.findAllRecordIn());
+    }
+
+
+    /**
+     * 获取申请人为当前用户的未审核申请
+     */
+    @GetMapping("/myPendingData")
+    public ResponseResult getMyPendingDate(){
+
+        List <recordIn> all=recordInService.findMyRecordPending();
+        return ResponseResult.success(all);
+
+    }
+    /**
+     * 获取申请人为当前用户的已完成申请
+     */
+    @GetMapping("/myCompletedData")
+    public ResponseResult getMyCompletedDate(){
+
+        List <recordIn> all=recordInService.findMyRecordCompleted();
+        return ResponseResult.success(all);
 
     }
 
@@ -73,6 +100,7 @@ public class RecordInController {
         record.setApplyTime(DateUtil.today());
 //        record.setReviewTime(DateUtil.today());
 //        record.setNo(IdUtil.fastSimpleUUID());订单编号
+        
         return ResponseResult.success(recordInService.save(record));
     }
 
@@ -104,13 +132,15 @@ public class RecordInController {
                                        @RequestParam String pname,
                                        @RequestParam String deposityIn,
                                        @RequestParam String deposityOut,
-                                       @RequestParam String type){
+                                       @RequestParam String type,
+                                       @RequestParam String applyTime){
         QueryWrapper<recordIn> queryWrapper = new QueryWrapper<recordIn>().orderByDesc("record_id");
 
         queryWrapper.like(StrUtil.isNotBlank(pname), "pname", pname);
         queryWrapper.like(StrUtil.isNotBlank(deposityIn), "deposity_in", deposityIn);
         queryWrapper.like(StrUtil.isNotBlank(deposityOut), "deposity_out", deposityOut);
         queryWrapper.like(StrUtil.isNotBlank(type), "type", type);
+        queryWrapper.like(StrUtil.isNotBlank(applyTime),"apply_time",applyTime);
         IPage<recordIn> page =new Page<>(pageNum,pageSize);
         return ResponseResult.success(recordInService.page(page,queryWrapper));
     }

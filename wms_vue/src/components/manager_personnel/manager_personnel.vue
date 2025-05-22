@@ -152,7 +152,7 @@ export default {
         value1: '',
         tableData: [],
         pageNum: 1,//当前页码
-        pageSize: 5,//每页个数
+        pageSize: 10,//每页个数
         username: '',
         userid: '',
         total: 0,

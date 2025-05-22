@@ -24,9 +24,10 @@
       
       <div class="block" style="margin-left: 10px">
         <el-date-picker
-          v-model="value1"
-          type="applyTime"
-          placeholder="选择日期">
+          v-model="applyTime"
+          type="date"
+          placeholder="选择日期"
+          value-format="yyyy-MM-dd">
         </el-date-picker>
       </div>
 
@@ -103,10 +104,9 @@ import request from '@/request/request'
   },
     data() {
       return {
-        value1: '',
         tableData: [],
         pageNum: 1,//当前页码
-        pageSize: 5,//每页个数
+        pageSize: 10,//每页个数
         pname: '',
         recordId: '',
         total: 0,
@@ -126,7 +126,7 @@ import request from '@/request/request'
         this.deposityOut=''
         this.applyTime=''
         this.type=''
- 
+
         this.load(this.pageNum)
       },
       handleImport(res){
@@ -163,8 +163,8 @@ import request from '@/request/request'
             pname: this.pname,
             deposityIn:this.deposityIn,
             deposityOut:this.deposityOut,
-            type:this.type
-            // applyTime:this.applyTime
+            type:this.type,
+            applyTime:this.applyTime
           }
         }).then(res => {
           if(res.code == 0){

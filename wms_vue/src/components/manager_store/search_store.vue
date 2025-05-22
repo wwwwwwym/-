@@ -17,7 +17,8 @@
         <el-date-picker
           v-model="stocktime"
           type="date"
-          placeholder="选择日期">
+          placeholder="选择日期"
+          value-format="yyyy-MM-dd">
         </el-date-picker>
       </div>
 
@@ -160,7 +161,7 @@ import request from '@/request/request'
         stocktime: '',
         tableData: [],
         pageNum: 1,//当前页码
-        pageSize: 5,//每页个数
+        pageSize: 10,//每页个数
         pname: '',
         stockid: '',
         total: 0,

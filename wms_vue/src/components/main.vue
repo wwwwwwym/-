@@ -5,7 +5,7 @@
       <el-aside width="200px" style="background-color: rgb(238, 241, 246);overflow: hidden;min-height: 100vh">
         <div style="height:70px;display: flex;justify-content: center;align-items: center">
           <img src="@/assets/logo.png" alt="" style="width: 10%">
-          <span style="margin-left: 10px">仓库管理系统</span>
+          <span style="margin-left: 10px">仓储管理系统</span>
         </div>
         
         <el-menu class="el-menu" :default-active="this.$route.path" router :unique-opened="true" >
@@ -15,6 +15,9 @@
             <el-menu-item index="/apply/in_apply"><i class="el-icon-document"></i>出入库申请</el-menu-item>
             <el-menu-item index="/apply/move_apply"><i class="el-icon-sort"></i>库存转移申请</el-menu-item>
           </el-submenu>
+          <!-- <el-menu-item index="/apply">
+            <template slot="title"><i class="el-icon-message"></i>申请提交</template>
+          </el-menu-item> -->
 
           <el-submenu index="/manager_record">
             <template slot="title"><i class="el-icon-bottom-right"></i>货流管理</template>
@@ -33,9 +36,11 @@
             <template slot="title"><i class="el-icon-house"></i>仓库管理</template>
           </el-menu-item>
 
-          <el-menu-item index="/myapplication">
+          <el-submenu index="application">
             <template slot="title"><i class="el-icon-finished"></i>我的申请</template>
-          </el-menu-item>
+            <el-menu-item index="/application/myapplication"><i class="el-icon-search"></i>我提交的申请</el-menu-item>
+            <el-menu-item index="/application/mypending" v-if="user.role!='普通员工'"><i class="el-icon-pie-chart"></i>我审核的申请</el-menu-item>
+          </el-submenu>
           <el-menu-item index="/myinfo">
             <template slot="title"><i class="el-icon-user"></i>个人中心</template>
           </el-menu-item>

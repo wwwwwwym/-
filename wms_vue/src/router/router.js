@@ -25,7 +25,8 @@ import manager_personnel from '@/components/manager_personnel/manager_personnel.
 
 import manager_deposity from '@/components/manager_deposity/search_deposity.vue'
 
-import myapplication from '@/components/myapplication/myapplication.vue'
+import myapplication from '@/components/application/myapplication.vue'
+import mypending from '@/components/application/mypending.vue'
 import myinfo from '@/components/myinfo/myinfo.vue'
 
 const router = new VueRouter({// 生成一个路由实例
@@ -121,10 +122,15 @@ const router = new VueRouter({// 生成一个路由实例
                     component:manager_deposity
                 },
 
-                {//7
+                {//7-1
                     name:'myapplication',
-                    path:'/myapplication',
+                    path:'/application/myapplication',
                     component:myapplication
+                },
+                {//7-2
+                    name:'mypending',
+                    path:'/application/mypending',
+                    component:mypending
                 },
                 {//8
                     name:'myinfo',

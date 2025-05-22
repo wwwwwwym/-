@@ -4,7 +4,7 @@
 <el-steps :active="active" finish-status="success" align-center>
   <el-step title="申请提交"></el-step>
   <el-step title="审核中"></el-step>
-  <el-step title="已完成"></el-step>
+  <!-- <el-step title="已完成"></el-step> -->
 </el-steps>
 
 <!-- 表单区域 -->
@@ -18,11 +18,11 @@
   <el-form-item label="产品价格" prop="price">
     <el-input v-model.number="ruleForm.price" ></el-input>
   </el-form-item>
-  <el-form-item label="仓库" prop="deposityNew">
+  <!-- <el-form-item label="仓库" prop="deposityNew">
     <el-select v-model="ruleForm.deposityNew" placeholder="请选择仓库名称">
       <el-option v-for="item in ['仓库1','仓库2','仓库3']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
-  </el-form-item>
+  </el-form-item> -->
   <el-form-item label="操作类型" prop="type">
     <el-radio-group v-model="ruleForm.type">
       <el-radio label="出货单"></el-radio>
@@ -126,8 +126,13 @@
         },
         apply(){
          this.$refs.ruleForm.validate((valid) => {
-          this.ruleForm.deposityOld=this.user.deposity;
           this.ruleForm.applyId=this.user.userid;
+          if(this.ruleForm.type=='进货单'){
+            this.ruleForm.deposityNew=this.user.deposity;
+          }else{
+            this.ruleForm.deposityOld=this.user.deposity;
+          }
+
           console.log(this.ruleForm)
                 if(valid){
                     this.$request.post('/recordIn/add',this.ruleForm).then(res => {

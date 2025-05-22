@@ -15,7 +15,7 @@
                 <el-input placeholder="请输入电话" v-model="user.telephone" ></el-input>
             </el-form-item>
             <el-form-item label="角色" prop="roleid">
-                <el-input  v-model="user.roleid" disabled></el-input>
+                <el-input  v-model="user.role" disabled></el-input>
             </el-form-item>
             <el-form-item label="入职时间" prop="time">
                 <el-input  v-model="formattedTime" disabled></el-input>

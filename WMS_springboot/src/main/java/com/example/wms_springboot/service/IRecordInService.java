@@ -6,7 +6,11 @@ import com.example.wms_springboot.entity.recordIn;
 import java.util.List;
 
 public interface IRecordInService extends IService<recordIn> {
-    List<recordIn> findAllRecordIn();
+    List<recordIn> findUserRecordPending();
 
-    List<recordIn> findAllRecordOut();
+    List<recordIn> findUserRecordCompleted();
+
+    List<recordIn> findMyRecordPending();
+
+    List<recordIn> findMyRecordCompleted();
 }
