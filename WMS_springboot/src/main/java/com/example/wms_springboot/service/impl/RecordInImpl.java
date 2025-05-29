@@ -19,6 +19,9 @@ public class RecordInImpl extends ServiceImpl<RecordInDao, recordIn> implements 
 //    @Autowired
     @Resource
     private RecordInDao recordIndao;
+    /**
+     * 查找审核人为当前用户的申请
+     */
     public List<recordIn> findUserRecordPending(){
 
         User currentUser = TokenUtils.getCurrentUser();

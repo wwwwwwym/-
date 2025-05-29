@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.xml.rpc.ServiceException;
-import java.io.Serializable;
-import java.util.Collection;
+//import javax.xml.rpc.ServiceException;
+//import java.io.Serializable;
+//import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -39,7 +39,9 @@ public class UserImpl extends ServiceImpl<UserDao,User> implements IUserService 
         return getOne(queryWrapper);
 
     }
-
+/**
+ * 注册
+ */
     @Override
     public User userRegister(User user) {
         //用户名校验
@@ -56,7 +58,9 @@ public class UserImpl extends ServiceImpl<UserDao,User> implements IUserService 
         }
         return user;
     }
-
+/**
+ * 登录
+ */
     @Override
     public User userLogin(User user) {
         //用户校验,密码账号对应
@@ -76,7 +80,9 @@ public class UserImpl extends ServiceImpl<UserDao,User> implements IUserService 
         dbUser.setToken(token);
         return dbUser;
     }
-
+/**
+ * 忘记密码
+ */
     @Override
     public Integer forgetPass(User user) {
         User dbUser = selectById(user.getUserid());

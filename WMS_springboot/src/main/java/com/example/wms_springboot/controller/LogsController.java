@@ -21,23 +21,6 @@ public class LogsController {
     private ILogsService logsService;
     @Autowired
     private IUserService userService;
-
-    /**
-     * 删除
-     */
-    @DeleteMapping("/delete/{id}")
-    public ResponseResult deleteUser(@PathVariable Integer id) {
-        return ResponseResult.success(logsService.removeById(id));
-    }
-
-    /**
-     * 批量删除
-     */
-    @DeleteMapping("/delete/batch")
-    public ResponseResult deleteUserBatch(@RequestBody List<Integer> ids) {
-        return ResponseResult.success(logsService.removeByIds(ids));
-    }
-
     /**
      * 分页模糊查询
      */
@@ -54,5 +37,4 @@ public class LogsController {
         IPage<logs> page = new Page<>(pageNum, pageSize);
         return ResponseResult.success(logsService.page(page, queryWrapper));
     }
-
 }

@@ -38,12 +38,12 @@ public class recordOut {
     @Alias("申请备注")
     private String applyRemark;//申请备注
     @Alias("申请时间")
-    private Date applyTime;//申请时间
+    private String applyTime;//申请时间
     @Alias("审核人工号")
     private Integer reviewId;//审核人id
     @Alias("审核备注")
     private String reviewRemark;//审核备注
     @Alias("审核时间")
-    private Date reviewTime;//审核时间
+    private String reviewTime;//审核时间
 
 }

@@ -25,10 +25,10 @@ public class transferRecord {
     private Integer state;//当前状态
     private Integer applyId;//申请人id
     private String applyRemark;//申请备注
-    private Date applyTime;//申请时间
+    private String applyTime;//申请时间
     private Integer reviewId;//审核人id
     private String reviewRemark;//审核备注
-    private Date reviewTime;//审核时间
+    private String reviewTime;//审核时间
 
 
 }

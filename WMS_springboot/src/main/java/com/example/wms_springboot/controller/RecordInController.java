@@ -2,7 +2,9 @@ package com.example.wms_springboot.controller;
 
 
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
@@ -13,6 +15,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.wms_springboot.config.Logs;
 import com.example.wms_springboot.entity.recordIn;
+import com.example.wms_springboot.entity.stockInfo;
 import com.example.wms_springboot.service.IRecordInService;
 import com.example.wms_springboot.utils.ResponseResult;
 import com.example.wms_springboot.utils.logType;
@@ -24,9 +27,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @CrossOrigin
@@ -78,7 +81,6 @@ public class RecordInController {
 
         List <recordIn> all=recordInService.findMyRecordCompleted();
         return ResponseResult.success(all);
-
     }
 
     /**
@@ -203,6 +205,31 @@ public class RecordInController {
             return ResponseResult.error("批量导入数据出错");
         }
         return ResponseResult.success(saveBatch);
+    }
+
+
+
+    /**
+     * 统计图数据
+     */
+    @GetMapping("/charts")
+    public ResponseResult charts(){
+        //包装折线图的数据
+        List<recordIn> list = recordInService.list();//数据多要换一种方法
+        Set<String> dates = list.stream().map(recordIn::getApplyTime).collect(Collectors.toSet());//set是无序的,用list排序
+        List<String> dateList = CollUtil.newArrayList(dates);
+        dateList.sort(Comparator.naturalOrder());
+        List<Dict> linelist = new ArrayList<>();
+        for (String date :dateList){
+            //统计当日所有金额总数
+            BigDecimal sum = list.stream().filter(recordIn -> recordIn.getApplyTime().equals(date))
+                    .map(recordIn::getPrice).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+            Dict dict =Dict.create();
+            Dict line = dict.set("date", date).set("value", sum);
+            linelist.add(line);
+        }
+        return ResponseResult.success(linelist);
+
     }
 
 }

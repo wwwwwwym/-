@@ -70,6 +70,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseResult userRegister(@RequestBody User user)
     {
+        user.setTime(DateUtil.today());
         return ResponseResult.success(userService.userRegister(user));
     }
 

@@ -27,9 +27,9 @@ public class recordIn {
     @Alias("记录类型")
     private String type;//产品名称
     @Alias("进货仓库")
-    private String deposityNew;//新仓库
+    private String deposityIn;//新仓库
     @Alias("出货仓库")
-    private String deposityOld;//原仓库
+    private String deposityOut;//原仓库
     @Alias("产品数量")
     private Integer quantity;//产品数量
     @Alias("产品价格")

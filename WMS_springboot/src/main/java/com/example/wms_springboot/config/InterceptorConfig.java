@@ -18,6 +18,7 @@ public class InterceptorConfig extends WebMvcConfigurationSupport {
                 .addPathPatterns("/**")//拦截所有请求路径
                 .excludePathPatterns("/user/login")
                 .excludePathPatterns("/user/register")
+                .excludePathPatterns("/**")
 //                .excludePathPatterns("/file/**")
                 .excludePathPatterns("/user/forgetPass");
 

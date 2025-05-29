@@ -67,6 +67,7 @@ const lineoption = {
 
       this.$request.get('/stock/charts').then(res =>{
          lineoption.xAxis.data = res.data?.map(v=>v.date) || [];
+         console.log(res.data)
          lineoption.series[0].data = res.data?.map(v=>v.value) || [];
          lineChart.setOption(lineoption);
       })

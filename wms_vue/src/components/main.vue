@@ -44,7 +44,7 @@
           <el-menu-item index="/myinfo">
             <template slot="title"><i class="el-icon-user"></i>个人中心</template>
           </el-menu-item>
-          <el-menu-item index="/logs_info"  v-if="user.role=='超管'">
+          <el-menu-item index="/logs_info"  v-if="user.role=='超级管理员'">
             <template slot="title" ><i class="el-icon-finished"></i>系统日志</template>
           </el-menu-item>
         </el-menu>
