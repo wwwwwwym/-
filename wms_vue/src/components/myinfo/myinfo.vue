@@ -23,9 +23,9 @@
             <!-- <el-form-item label="负责仓库" prop="deposity">
                 <el-input placeholder="请输入仓库名" v-model="user.deposity" ></el-input>
             </el-form-item> -->
-            <el-form-item label="负责仓库" prop="deposity">
+            <!-- <el-form-item label="负责仓库" prop="deposity">
                 <el-input  v-model="user.deposity" disabled></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <div>
                 <el-button type="primary" @click="update">确 认</el-button>
             </div>

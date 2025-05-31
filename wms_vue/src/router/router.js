@@ -12,8 +12,9 @@ import nofound from '@/components/Auth/404.vue'
 import logs_info from '@/components/logs_info/logs_info.vue'
 import newPassword from '@/components/myinfo/newPassword.vue'
 
-import in_apply from '@/components/apply/in_apply.vue'
-import move_apply from '@/components/apply/move_apply.vue'
+// import in_apply from '@/components/apply/in_apply.vue'
+// import move_apply from '@/components/apply/move_apply.vue'
+import apply from '@/components/apply/in_apply.vue'
 
 import manager_record_search from '@/components/manager_record/search_record.vue'
 import manager_record_view from '@/components/manager_record/view_record.vue'
@@ -78,15 +79,15 @@ const router = new VueRouter({// 生成一个路由实例
                 },
 
                 {//1-1
-                    name:'in_apply', // 给当前路由组件定义的名字
-                    path:'/apply/in_apply', // url路径
-                    component:in_apply, // 组件名称
+                    name:'apply', // 给当前路由组件定义的名字
+                    path:'/apply', // url路径
+                    component:apply, // 组件名称
                 },
-                {//1-2
-                    name:'move_apply',
-                    path:'/apply/move_apply',
-                    component:move_apply
-                },
+                // {//1-2
+                //     name:'move_apply',
+                //     path:'/apply/move_apply',
+                //     component:move_apply
+                // },
 
                 {//2-1
                     name:'search_record',

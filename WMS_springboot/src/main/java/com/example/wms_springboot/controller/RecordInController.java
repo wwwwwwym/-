@@ -16,9 +16,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.wms_springboot.config.Logs;
 import com.example.wms_springboot.entity.recordIn;
 import com.example.wms_springboot.entity.stockInfo;
+import com.example.wms_springboot.exception.CustomException;
 import com.example.wms_springboot.service.IRecordInService;
+import com.example.wms_springboot.service.IStockInfoService;
 import com.example.wms_springboot.utils.ResponseResult;
+import com.example.wms_springboot.utils.ResultCode;
 import com.example.wms_springboot.utils.logType;
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +43,8 @@ public class RecordInController {
 
     @Autowired
     private IRecordInService recordInService;
+    @Autowired
+    private IStockInfoService stockInfoService;
 
 /**
  * 获取审核人为当前用户的未审核申请
@@ -59,6 +65,15 @@ public class RecordInController {
     public ResponseResult getCompletedDate(){
 
         List <recordIn> all=recordInService.findUserRecordCompleted();
+        return ResponseResult.success(all);
+    }
+    /**
+     * 获取审核人为当前用户的已驳回申请
+     */
+    @GetMapping("/allRejectedData")
+    public ResponseResult getRejectedDate(){
+
+        List <recordIn> all=recordInService.findUserRecordRejected();
         return ResponseResult.success(all);
     }
 
@@ -82,6 +97,15 @@ public class RecordInController {
         List <recordIn> all=recordInService.findMyRecordCompleted();
         return ResponseResult.success(all);
     }
+    /**
+     * 获取申请人为当前用户的已驳回申请
+     */
+    @GetMapping("/myRejectedData")
+    public ResponseResult getMyRejectedDate(){
+
+        List <recordIn> all=recordInService.findMyRecordRejected();
+        return ResponseResult.success(all);
+    }
 
     /**
      * 修改
@@ -95,35 +119,25 @@ public class RecordInController {
     /**
      * 新增
      */
-    @Logs(operation = "货流管理",type = logType.ADD)
+    @Logs(operation = "货流管理",type = logType.APPLY)
     @PostMapping("/add")
     public ResponseResult addRecord(@RequestBody recordIn record)
     {
         record.setApplyTime(DateUtil.today());
-//        record.setReviewTime(DateUtil.today());
+        if(record.getType().equals("出货单")||record.getType().equals("调货单"))
+        {
+            stockInfo result = stockInfoService.findByOld(record.getPname(),record.getDeposityOld());
+            if(result==null)
+            {
+                throw new CustomException(ResultCode.NOT_EXIST);
+            }else if(result.getQuantity()<record.getQuantity())
+            {
+                throw new CustomException(ResultCode.LESS_STOCK);
+            }
+        }
 //        record.setNo(IdUtil.fastSimpleUUID());订单编号
-        
         return ResponseResult.success(recordInService.save(record));
     }
-
-//    /**
-//     * 删除
-//     */
-//    @DeleteMapping("/delete/{recordId}")
-//    public ResponseResult deleteUser(@PathVariable Integer recordId)
-//
-//    {
-//        return ResponseResult.success(recordInService.removeById(recordId));
-//    }
-//
-//    /**
-//     * 批量删除
-//     */
-//    @DeleteMapping("/delete/batch")
-//    public ResponseResult deleteUserBatch(@RequestBody List<Integer> recordIds)
-//    {
-//        return ResponseResult.success(recordInService.removeByIds(recordIds));
-//    }
 
     /**
      * 分页模糊查询
@@ -132,15 +146,15 @@ public class RecordInController {
     public ResponseResult selectByPage(@RequestParam Integer pageNum,
                                        @RequestParam Integer pageSize,
                                        @RequestParam String pname,
-                                       @RequestParam String deposityIn,
-                                       @RequestParam String deposityOut,
+                                       @RequestParam String deposityNew,
+                                       @RequestParam String deposityOld,
                                        @RequestParam String type,
                                        @RequestParam String applyTime){
         QueryWrapper<recordIn> queryWrapper = new QueryWrapper<recordIn>().orderByDesc("record_id");
 
         queryWrapper.like(StrUtil.isNotBlank(pname), "pname", pname);
-        queryWrapper.like(StrUtil.isNotBlank(deposityIn), "deposity_in", deposityIn);
-        queryWrapper.like(StrUtil.isNotBlank(deposityOut), "deposity_out", deposityOut);
+        queryWrapper.like(StrUtil.isNotBlank(deposityNew), "deposity_new", deposityNew);
+        queryWrapper.like(StrUtil.isNotBlank(deposityOld), "deposity_old", deposityOld);
         queryWrapper.like(StrUtil.isNotBlank(type), "type", type);
         queryWrapper.like(StrUtil.isNotBlank(applyTime),"apply_time",applyTime);
         IPage<recordIn> page =new Page<>(pageNum,pageSize);
@@ -222,14 +236,89 @@ public class RecordInController {
         List<Dict> linelist = new ArrayList<>();
         for (String date :dateList){
             //统计当日所有金额总数
-            BigDecimal sum = list.stream().filter(recordIn -> recordIn.getApplyTime().equals(date))
+            BigDecimal sum = list.stream().filter(recordIn -> recordIn.getApplyTime().equals(date)&&
+                            "已完成".equals(recordIn.getState()))
                     .map(recordIn::getPrice).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
             Dict dict =Dict.create();
             Dict line = dict.set("date", date).set("value", sum);
             linelist.add(line);
         }
         return ResponseResult.success(linelist);
+    }
+
+
+    /**
+     * 审核通过
+     */
+    @Logs(operation = "货流管理",type = logType.REVIEW_SUCCESS)
+    @PostMapping("/pendingAgree")
+    public ResponseResult pendingAgree(@RequestBody recordIn record){
+        record.setReviewTime(DateUtil.today());
+        record.setState("已完成");
+        recordInService.updateById(record);
+        stockInfo result ;
+        if(record.getType().equals("出货单"))
+        {
+            System.out.println(record.getDeposityOld()+record.getPname());
+            result=stockInfoService.findByOld(record.getPname(),record.getDeposityOld());
+            result.setQuantity(result.getQuantity()-record.getQuantity());
+            return ResponseResult.success(stockInfoService.updateById(result));
+        }
+        else if(record.getType().equals("进货单"))
+        {
+            System.out.println(record.getPname());
+            System.out.println(record.getDeposityNew());
+            result=stockInfoService.findByNew(record.getPname(),record.getDeposityNew());
+            if(result==null)
+            {
+                result = new stockInfo();
+                result.setDeposity(record.getDeposityNew());
+                result.setPname(record.getPname());
+                result.setStocktime(DateUtil.today());
+                result.setQuantity(0);
+                result.setPrice(record.getPrice());
+                result.setPicture(record.getPicture());
+                stockInfoService.save(result);
+            }
+            result.setQuantity(result.getQuantity()+record.getQuantity());
+            return ResponseResult.success(stockInfoService.updateById(result));
+        }
+//        if(record.getType().equals("调货单"))
+        else
+        {
+
+            stockInfo Old = stockInfoService.findByOld(record.getPname(),record.getDeposityOld());
+            stockInfo New = stockInfoService.findByNew(record.getPname(),record.getDeposityNew());
+            if(New==null)
+            {
+                New = new stockInfo();
+                New.setDeposity(record.getDeposityNew());
+                New.setPname(record.getPname());
+                New.setStocktime(DateUtil.today());
+                New.setQuantity(0);
+                New.setPrice(record.getPrice());
+                stockInfoService.save(New);
+            }
+            Old.setQuantity(Old.getQuantity()-record.getQuantity());
+            New.setQuantity(New.getQuantity()+record.getQuantity());
+            stockInfoService.updateById(Old);
+            return ResponseResult.success(stockInfoService.updateById(New));
+        }
 
     }
+
+    /**
+     * 审核拒绝
+     */
+    @Logs(operation = "货流管理",type = logType.REVIEW_REJECT)
+    @PostMapping("/pendingReject")
+    public ResponseResult pendingReject(@RequestBody recordIn record){
+
+        record.setReviewTime(DateUtil.today());
+        record.setState("已驳回");
+        return ResponseResult.success(recordInService.updateById(record));
+    }
+
+
 
 }

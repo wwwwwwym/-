@@ -30,7 +30,7 @@
   </el-form-item>
     <el-form-item label="审核人" prop="reviewId">
     <el-select v-model="ruleForm.reviewId" placeholder="请选择审核人">
-      <el-option v-for="item in ['111','222','333']" :key="item" :label="item" :value="item"></el-option>
+      <el-option v-for="item in ['2001','7933','333']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="申请备注" >
@@ -131,7 +131,6 @@
                     this.$request.post('/recordIn/add',this.ruleForm).then(res => {
                       if(res.code===0)
                       {
-                        
                         this.$message.success("提交成功");
                         this.active=1;
                       }else{

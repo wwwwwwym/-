@@ -150,10 +150,13 @@ public class UserController {
     public ResponseResult selectByPage(@RequestParam Integer pageNum,
                                        @RequestParam Integer pageSize,
                                        @RequestParam Integer userid,
-                                       @RequestParam String username,
-                                       @RequestParam String deposity){
+                                       @RequestParam String role,
+                                       @RequestParam String username){
         QueryWrapper<User> queryWrapper = new QueryWrapper<User>().orderByDesc("userid");
 
+        if(role.equals("管理员")){
+            queryWrapper.eq("role","普通员工");
+        }
         // 仅当 userid 不为空时，添加精确匹配条件
         if (userid!=null) {
             String id=String.valueOf(userid);
@@ -164,9 +167,9 @@ public class UserController {
         if (StringUtils.hasText(username)) {
             queryWrapper.like("username", username.trim());
         }
-        if (StringUtils.hasText(deposity)) {
-            queryWrapper.like("deposity", deposity.trim());
-        }
+//        if (StringUtils.hasText(deposity)) {
+//            queryWrapper.like("deposity", deposity.trim());
+//        }
         IPage<User> page =new Page<>(pageNum,pageSize);
         return ResponseResult.success(userService.page(page,queryWrapper));
     }

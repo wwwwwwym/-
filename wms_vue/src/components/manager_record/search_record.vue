@@ -12,13 +12,13 @@
         </el-option>
       </el-select> -->
       <!-- <el-input v-model="deposity" placeholder="请输入来源仓库" style="width:20%; margin-left: 10px"></el-input> -->
-      <el-select v-model="deposityIn" placeholder="请选择进货仓库" style="width:20%; margin-left: 10px">
+      <el-select v-model="form.deposityNew" placeholder="请选择新仓库" style="width:20%; margin-left: 10px">
         <el-option v-for="item in ['仓库1','仓库2','仓库3','仓库4','仓库5']" :key="item" :label="item" :value="item"></el-option>
       </el-select>
-      <el-select v-model="deposityOut" placeholder="请选择出货仓库" style="width:20%; margin-left: 10px">
+      <el-select v-model="form.deposityOld" placeholder="请选择原仓库" style="width:20%; margin-left: 10px">
         <el-option v-for="item in ['仓库1','仓库2','仓库3','仓库4','仓库5']" :key="item" :label="item" :value="item"></el-option>
       </el-select>
-      <el-select v-model="type" placeholder="请选择记录类型" style="width:20%; margin-left: 10px">
+      <el-select v-model="form.type" placeholder="请选择记录类型" style="width:20%; margin-left: 10px">
         <el-option v-for="item in ['出货单','进货单','调货单']" :key="item" :label="item" :value="item"></el-option>
       </el-select>
       
@@ -31,7 +31,7 @@
         </el-date-picker>
       </div>
 
-      <el-input v-model="pname" placeholder="请输入产品名称" style="width:20%; margin-left: 10px"></el-input> 
+      <el-input v-model="form.pname" placeholder="请输入产品名称" style="width:20%; margin-left: 10px"></el-input> 
 
       <el-button type="primary" style="margin-left: 40px" @click="load(1)"><i class="el-icon-search"></i> 查询</el-button>
       <el-button type="primary" style="margin-left: 10px" @click="reset"><i class="el-icon-refresh-right"></i> 重置</el-button>
@@ -57,21 +57,19 @@
     <el-table-column prop="recordId" label="记录编号" width="90"> </el-table-column>
     <el-table-column prop="pname" label="产品名称" > </el-table-column>
     <el-table-column prop="type" label="记录类型" > </el-table-column>
-    <el-table-column prop="deposityIn" label="进货仓库" width="90"> </el-table-column>
-    <el-table-column prop="deposityOut" label="出货仓库" width="90"> </el-table-column>
-    <el-table-column prop="quantity" label="数量" width="90"> </el-table-column>
-    <el-table-column prop="price" label="价格" width="90"> </el-table-column>
+    <el-table-column prop="deposityNew" label="新仓库" width="90"> </el-table-column>
+    <el-table-column prop="deposityOld" label="原仓库" width="90"> </el-table-column>
     <el-table-column prop="state" label="当前状态" width="90"> </el-table-column>
     <el-table-column prop="applyId" label="申请人" width="90"> </el-table-column>
     <el-table-column prop="applyTime" label="申请时间" width="180" > </el-table-column>
     <el-table-column prop="reviewId" label="审核人" width="90"> </el-table-column>
     <el-table-column prop="reviewTime" label="审核时间" width="180"> </el-table-column>
-    <!-- <el-table-column fixed="right" label="操作" >
+    <el-table-column fixed="right" label="操作" >
       <template slot-scope="scope">
-        <el-button  type="text" size="medium" @click="handleEdit(scope.row)">编辑</el-button>
-        <el-button type="text" size="medium" @click="del(scope.row.userid)">删除</el-button>
+        <el-button  type="text" size="medium" @click="handleDetail(scope.row)">查看详情</el-button>
+        <!-- <el-button type="text" size="medium" @click="del(scope.row.userid)">删除</el-button> -->
       </template>
-    </el-table-column> -->
+    </el-table-column>
   </el-table>
 
 
@@ -86,6 +84,63 @@
       :total="total">
     </el-pagination>
   </div>
+
+<!-- 详情弹出框 -->
+<el-dialog title="详细信息" :visible.sync="detailFormVisible" width="40%">
+    <el-form :model="form" :rules="rules" label-width="80px" style="padding-right:20px" ref="form" >
+      <div style="margin:25px ; text-align:center;justify-content:center;display:flex" >
+          <img v-if="form.picture" :src="form.picture" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </div>
+        <el-form-item label="记录编号" >
+            <el-input  v-model="form.recordId" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="产品名称" >
+            <el-input v-model="form.pname" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="记录类型" >
+            <el-input v-model="form.type" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="原仓库" >
+            <el-input v-model="form.deposityOld" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="新仓库" >
+            <el-input v-model="form.deposityNew" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="数量" >
+            <el-input v-model="form.quantity" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="价格" >
+            <el-input v-model="form.price" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="状态" >
+            <el-input v-model="form.state" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="申请人" >
+            <el-input v-model="form.applyId" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="申请时间" >
+            <el-input v-model="form.applyTime" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="申请备注" >
+            <el-input v-model="form.applyRemark" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="审核人" >
+            <el-input v-model="form.reviewId" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="审核时间" >
+            <el-input v-model="form.reviewTime" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="审核意见" >
+            <el-input v-model="form.reviewRemark" disabled></el-input>
+        </el-form-item>
+    </el-form>
+    <!-- <div slot="footer" class="dialog-footer">
+        <el-button @click="editFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="update">确 定</el-button>
+    </div> -->
+</el-dialog>
+
 
 
 
@@ -112,21 +167,46 @@ import request from '@/request/request'
         total: 0,
         record_ids: [],
         user:JSON.parse(localStorage.getItem('user') || '{}'),
-        deposityIn: '',
-        deposityOut: '',
+        deposityNew: '',
+        deposityOld: '',
         applyTime: '',
         type: '',
+        detailFormVisible: false,
+        form:{
+          recordId: '',
+          pname: '',
+          type: '',
+          deposityNew: '',
+          deposityOld: '',
+          quantity: '',
+          price: '',
+          state: '',
+          applyId: '',
+          applyTime: '',
+          applyRemark: '',
+          reviewId: '',
+          reviewTime: '',
+          reviewRemark: '',
+
+        },
 
       }
     },
     methods: {
+      handleDetail(row){
+        this.form=JSON.parse(JSON.stringify(row))//给form对象赋值，深拷贝
+        this.detailFormVisible=true
+      },
+      handleAvatarSuccess(response){
+        this.form.picture = response.data
+        console.log(response.data)
+      },
       reset(){
         this.pname=''
-        this.deposityIn=''
-        this.deposityOut=''
+        this.deposityNew=''
+        this.deposityOld=''
         this.applyTime=''
         this.type=''
-
         this.load(this.pageNum)
       },
       handleImport(res){
@@ -161,8 +241,8 @@ import request from '@/request/request'
             pageNum: this.pageNum,
             pageSize: this.pageSize,
             pname: this.pname,
-            deposityIn:this.deposityIn,
-            deposityOut:this.deposityOut,
+            deposityNew:this.deposityNew,
+            deposityOld:this.deposityOld,
             type:this.type,
             applyTime:this.applyTime
           }
@@ -192,5 +272,19 @@ import request from '@/request/request'
 .title{
   text-align:left;
 }
+   ::v-deep .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  
+   ::v-deep .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
  
 </style>

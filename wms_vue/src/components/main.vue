@@ -4,20 +4,20 @@
     <el-container style="height: 100vh">
       <el-aside width="200px" style="background-color: rgb(238, 241, 246);overflow: hidden;min-height: 100vh">
         <div style="height:70px;display: flex;justify-content: center;align-items: center">
-          <img src="@/assets/logo.png" alt="" style="width: 10%">
+          <img src="@/assets/Logo_wms.png" alt="" style="width: 10%">
           <span style="margin-left: 10px">仓储管理系统</span>
         </div>
         
         <el-menu class="el-menu" :default-active="this.$route.path" router :unique-opened="true" >
           <el-menu-item index="/intro"><i class="el-icon-menu"></i>首页</el-menu-item>
-          <el-submenu index="/apply">
+          <!-- <el-submenu index="/apply">
             <template slot="title"><i class="el-icon-message"></i>申请提交</template>
             <el-menu-item index="/apply/in_apply"><i class="el-icon-document"></i>出入库申请</el-menu-item>
             <el-menu-item index="/apply/move_apply"><i class="el-icon-sort"></i>库存转移申请</el-menu-item>
-          </el-submenu>
-          <!-- <el-menu-item index="/apply">
+          </el-submenu> -->
+          <el-menu-item index="/apply">
             <template slot="title"><i class="el-icon-message"></i>申请提交</template>
-          </el-menu-item> -->
+          </el-menu-item>
 
           <el-submenu index="/manager_record">
             <template slot="title"><i class="el-icon-bottom-right"></i>货流管理</template>

@@ -4,7 +4,6 @@
   <div style="display:flex;">
 <!-- 查询组件 -->
 
-      <el-input v-model="deposity" placeholder="请输入负责仓库" style="width:20%; margin-left: 10px"></el-input>
       <el-input v-model="username" placeholder="请输入用户名" style="width:20%; margin-left: 10px"></el-input>
       <el-input v-model="userid" placeholder="请输入工号" style="width:20%; margin-left: 10px"></el-input>  
       <el-button type="primary" style="margin-left: 40px" @click="load(1)"><i class="el-icon-search"></i> 查询</el-button>
@@ -30,7 +29,7 @@
     <el-table-column prop="userid" label="用户id"> </el-table-column>
     <el-table-column prop="username" label="用户名称" > </el-table-column>
     <el-table-column prop="role" label="角色" > </el-table-column>
-    <el-table-column prop="deposity" label="负责仓库" > </el-table-column>
+    <!-- <el-table-column prop="deposity" label="负责仓库" > </el-table-column> -->
     <el-table-column prop="telephone" label="电话号码" > </el-table-column>
     <el-table-column prop="time" label="入职时间" :formatter="formatTime"> </el-table-column>
     <el-table-column fixed="right" label="操作" width="180" >
@@ -72,13 +71,13 @@
         </el-form-item> -->
         <el-form-item label="用户角色" prop="role">
             <el-select v-model="form.role" placeholder="请选择角色" style="width:100%">
-              <el-option v-for="item in ['普通员工','管理员','超管']" :key="item" :label="item" :value="item"></el-option>
+              <el-option v-for="item in ['普通员工','管理员','超级管理员']" :key="item" :label="item" :value="item"></el-option>
             </el-select>
         </el-form-item>
         
-        <el-form-item label="负责仓库" prop="deposity">
+        <!-- <el-form-item label="负责仓库" prop="deposity">
             <el-input placeholder="请输入负责仓库" v-model="form.deposity" ></el-input>
-        </el-form-item>
+        </el-form-item> -->
     </el-form>
     <div slot="footer" class="dialog-footer">
         <el-button @click="addFormVisible = false">取 消</el-button>
@@ -101,9 +100,9 @@
         <el-form-item label="角色" prop="role">
             <el-input placeholder="请输入角色" v-model="form.role" ></el-input>
         </el-form-item>
-        <el-form-item label="负责仓库" prop="deposity">
+        <!-- <el-form-item label="负责仓库" prop="deposity">
             <el-input placeholder="请输入负责仓库" v-model="form.deposity" ></el-input>
-        </el-form-item>
+        </el-form-item> -->
     </el-form>
     <div slot="footer" class="dialog-footer">
         <el-button @click="editFormVisible = false">取 消</el-button>
@@ -155,6 +154,7 @@ export default {
         pageSize: 10,//每页个数
         username: '',
         userid: '',
+        
         total: 0,
         deposity: '',
         editFormVisible:false,
@@ -167,7 +167,7 @@ export default {
           username: '',
           telephone: '',
           // deposityValue: '',
-          deposity: '',
+          // deposity: '',
         },
         deposityValue:'',
         rules: {
@@ -177,9 +177,9 @@ export default {
           role: [
             {required: true, validator: checkNull, trigger: 'blur' }
           ],
-          deposity: [
-            {required: true, validator: checkNull, trigger: 'blur' }
-          ],
+          // deposity: [
+          //   {required: true, validator: checkNull, trigger: 'blur' }
+          // ],
           userid: [
             {required: true, validator: checkId, trigger: 'blur' }
           ],
@@ -290,7 +290,7 @@ export default {
       reset(){
         this.username=''
         this.userid=''
-        this.deposity=''
+        // this.deposity=''
         this.load(this.pageNum)
       },
       load(pageNum){//分页查询
@@ -304,7 +304,8 @@ export default {
             pageSize: this.pageSize,
             userid: this.userid,
             username: this.username,
-            deposity:this.deposity
+            role: this.user.role,
+            // deposity:this.deposity
           }
         }).then(res => {
           if(res.code == 0){

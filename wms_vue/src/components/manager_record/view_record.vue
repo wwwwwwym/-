@@ -60,7 +60,7 @@ const lineoption = {
       name: '1号仓库',
       type: 'line',
       stack: 'Total',
-      data: [120, 132, 101, 134, 90, 230, 210]
+      data: []
     },
     {
       name: '2号仓库',
@@ -110,7 +110,7 @@ const lineoption = {
       this.$request.get('/recordIn/charts').then(res =>{
          lineoption.xAxis.data = res.data?.map(v=>v.date) || [];
          console.log(res.data)
-         // option.series[0].data = res.data?.map(v=>v.value) || [];
+         lineoption.series[0].data = res.data?.map(v=>v.value) || [];
 
          lineChart.setOption(lineoption);
       })

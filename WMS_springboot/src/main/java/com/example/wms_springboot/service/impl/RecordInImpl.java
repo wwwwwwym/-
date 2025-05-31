@@ -4,6 +4,7 @@ package com.example.wms_springboot.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.wms_springboot.dao.RecordInDao;
+import com.example.wms_springboot.dao.StockInfoDao;
 import com.example.wms_springboot.entity.User;
 import com.example.wms_springboot.entity.recordIn;
 import com.example.wms_springboot.service.IRecordInService;
@@ -34,6 +35,12 @@ public class RecordInImpl extends ServiceImpl<RecordInDao, recordIn> implements 
                 .eq("review_id",currentUser.getUserid()).eq("state","已完成")
                 .orderByDesc("review_time").last("limit 0,10"));
     }
+    public List<recordIn> findUserRecordRejected(){
+        User currentUser = TokenUtils.getCurrentUser();
+        return recordIndao.selectList(new QueryWrapper<recordIn>()
+                .eq("review_id",currentUser.getUserid()).eq("state","已驳回")
+                .orderByDesc("review_time").last("limit 0,10"));
+    }
 
 
     public List<recordIn> findMyRecordPending(){
@@ -48,5 +55,13 @@ public class RecordInImpl extends ServiceImpl<RecordInDao, recordIn> implements 
                 .eq("apply_id",currentUser.getUserid()).eq("state","已完成")
                 .orderByDesc("review_time").last("limit 0,10"));
     }
+
+    public List<recordIn> findMyRecordRejected(){
+        User currentUser = TokenUtils.getCurrentUser();
+        return recordIndao.selectList(new QueryWrapper<recordIn>()
+                .eq("apply_id",currentUser.getUserid()).eq("state","已驳回")
+                .orderByDesc("review_time").last("limit 0,10"));
+    }
+
 
 }

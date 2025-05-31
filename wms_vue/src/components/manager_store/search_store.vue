@@ -224,7 +224,6 @@ import request from '@/request/request'
       handleAvatarSuccess(response){
         this.form.picture = response.data
         console.log(response.data)
-
       },
         delBatch(){
         if(!this.stockids.length)

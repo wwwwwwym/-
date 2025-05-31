@@ -1,6 +1,6 @@
 <template>
  <div id='app'>
-    <div style="height:100vh; display:flex; justify-content:center; align-items:center;background-color:#8da1e2">     
+    <div :style="{ backgroundImage: `url('${require('@/assets/background.jpg')}'` }" style="height:100vh; display:flex; justify-content:center; align-items:center; background-size:cover">     
     <div style="display:flex; align-items:center;justify-content:center; background-color:white; width:30% ; height:50%; border-radius:5px">
       <el-form :model="ruleForm" style="width:80%;" :rules="rules" ref="ruleForm"  class="demo-ruleForm" >
       <!-- <el-form > -->

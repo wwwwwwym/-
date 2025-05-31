@@ -1,6 +1,6 @@
 <template>
  <div id='user_register'>
-  <div style="height:100vh; display:flex; justify-content:center; align-items:center;background-color:#8da1e2">     
+  <div :style="{ backgroundImage: `url('${require('@/assets/background.jpg')}'` }" style="height:100vh; display:flex; justify-content:center; align-items:center;background-size:cover">     
     <div style="display:flex; align-items:center;justify-content:center; background-color:white; width:30% ; height:70%; border-radius:5px">
       <el-form :model="ruleForm" style="width:80%;" :rules="rules" ref="ruleForm"  class="demo-ruleForm" >
       <!-- <el-form > -->
@@ -21,10 +21,10 @@
             <el-input show-password placeholder=" 请再次输入密码" type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
         </el-form-item>
         
-        <el-select v-model="ruleForm.deposityValue" @change="handleDepositChange" placeholder="请选择所负责仓库" style="width:100%;">
+        <!-- <el-select v-model="ruleForm.deposityValue" @change="handleDepositChange" placeholder="请选择所负责仓库" style="width:100%;">
           <el-option  v-for="item in options" :key="item.value" :label="item.label" :value="item.value" >
           </el-option>
-        </el-select>
+        </el-select> -->
 
         <el-form-item prop="telephone">
             <el-input placeholder=" 请输入电话号码" v-model="ruleForm.telephone"></el-input>
