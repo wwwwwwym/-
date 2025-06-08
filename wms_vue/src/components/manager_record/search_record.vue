@@ -12,11 +12,11 @@
         </el-option>
       </el-select> -->
       <!-- <el-input v-model="deposity" placeholder="请输入来源仓库" style="width:20%; margin-left: 10px"></el-input> -->
-      <el-select v-model="form.deposityNew" placeholder="请选择新仓库" style="width:20%; margin-left: 10px">
-        <el-option v-for="item in ['仓库1','仓库2','仓库3','仓库4','仓库5']" :key="item" :label="item" :value="item"></el-option>
+      <el-select v-model="form.deposityNew" placeholder="请选择进货仓库" style="width:20%; margin-left: 10px">
+        <el-option v-for="item in ['1号仓库','2号仓库','3号仓库','4号仓库','5号仓库']" :key="item" :label="item" :value="item"></el-option>
       </el-select>
-      <el-select v-model="form.deposityOld" placeholder="请选择原仓库" style="width:20%; margin-left: 10px">
-        <el-option v-for="item in ['仓库1','仓库2','仓库3','仓库4','仓库5']" :key="item" :label="item" :value="item"></el-option>
+      <el-select v-model="form.deposityOld" placeholder="请选择出货仓库" style="width:20%; margin-left: 10px">
+        <el-option v-for="item in ['1号仓库','2号仓库','3号仓库','4号仓库','5号仓库']" :key="item" :label="item" :value="item"></el-option>
       </el-select>
       <el-select v-model="form.type" placeholder="请选择记录类型" style="width:20%; margin-left: 10px">
         <el-option v-for="item in ['出货单','进货单','调货单']" :key="item" :label="item" :value="item"></el-option>
@@ -24,7 +24,7 @@
       
       <div class="block" style="margin-left: 10px">
         <el-date-picker
-          v-model="applyTime"
+          v-model="form.applyTime"
           type="date"
           placeholder="选择日期"
           value-format="yyyy-MM-dd">
@@ -57,8 +57,8 @@
     <el-table-column prop="recordId" label="记录编号" width="90"> </el-table-column>
     <el-table-column prop="pname" label="产品名称" > </el-table-column>
     <el-table-column prop="type" label="记录类型" > </el-table-column>
-    <el-table-column prop="deposityNew" label="新仓库" width="90"> </el-table-column>
-    <el-table-column prop="deposityOld" label="原仓库" width="90"> </el-table-column>
+    <el-table-column prop="deposityNew" label="进货仓库" width="90"> </el-table-column>
+    <el-table-column prop="deposityOld" label="出货仓库" width="90"> </el-table-column>
     <el-table-column prop="state" label="当前状态" width="90"> </el-table-column>
     <el-table-column prop="applyId" label="申请人" width="90"> </el-table-column>
     <el-table-column prop="applyTime" label="申请时间" width="180" > </el-table-column>
@@ -101,10 +101,10 @@
         <el-form-item label="记录类型" >
             <el-input v-model="form.type" disabled></el-input>
         </el-form-item>
-        <el-form-item label="原仓库" >
+        <el-form-item label="出货仓库" >
             <el-input v-model="form.deposityOld" disabled></el-input>
         </el-form-item>
-        <el-form-item label="新仓库" >
+        <el-form-item label="进货仓库" >
             <el-input v-model="form.deposityNew" disabled></el-input>
         </el-form-item>
         <el-form-item label="数量" >
@@ -162,15 +162,15 @@ import request from '@/request/request'
         tableData: [],
         pageNum: 1,//当前页码
         pageSize: 10,//每页个数
-        pname: '',
-        recordId: '',
+        // pname: '',
+        // recordId: '',
         total: 0,
         record_ids: [],
         user:JSON.parse(localStorage.getItem('user') || '{}'),
-        deposityNew: '',
-        deposityOld: '',
-        applyTime: '',
-        type: '',
+        // deposityNew: '',
+        // deposityOld: '',
+        // applyTime: '',
+        // type: '',
         detailFormVisible: false,
         form:{
           recordId: '',
@@ -202,11 +202,11 @@ import request from '@/request/request'
         console.log(response.data)
       },
       reset(){
-        this.pname=''
-        this.deposityNew=''
-        this.deposityOld=''
-        this.applyTime=''
-        this.type=''
+        this.form.pname=''
+        this.form.deposityNew=''
+        this.form.deposityOld=''
+        this.form.applyTime=''
+        this.form.type=''
         this.load(this.pageNum)
       },
       handleImport(res){
@@ -240,11 +240,11 @@ import request from '@/request/request'
           params: {
             pageNum: this.pageNum,
             pageSize: this.pageSize,
-            pname: this.pname,
-            deposityNew:this.deposityNew,
-            deposityOld:this.deposityOld,
-            type:this.type,
-            applyTime:this.applyTime
+            pname: this.form.pname,
+            deposityNew:this.form.deposityNew,
+            deposityOld:this.form.deposityOld,
+            type:this.form.type,
+            applyTime:this.form.applyTime
           }
         }).then(res => {
           if(res.code == 0){

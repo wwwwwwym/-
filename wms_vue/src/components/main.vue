@@ -2,7 +2,7 @@
 <!-- 首页 -->
  <div id='app'>
     <el-container style="height: 100vh">
-      <el-aside width="200px" style="background-color: rgb(238, 241, 246);overflow: hidden;min-height: 100vh">
+      <el-aside width="200px" style="overflow: hidden;min-height: 100vh">
         <div style="height:70px;display: flex;justify-content: center;align-items: center">
           <img src="@/assets/Logo_wms.png" alt="" style="width: 10%">
           <span style="margin-left: 10px">仓储管理系统</span>
@@ -41,10 +41,10 @@
             <el-menu-item index="/application/myapplication"><i class="el-icon-search"></i>我提交的申请</el-menu-item>
             <el-menu-item index="/application/mypending" v-if="user.role!='普通员工'"><i class="el-icon-pie-chart"></i>我审核的申请</el-menu-item>
           </el-submenu>
-          <el-menu-item index="/myinfo">
+          <!-- <el-menu-item index="/myinfo">
             <template slot="title"><i class="el-icon-user"></i>个人中心</template>
-          </el-menu-item>
-          <el-menu-item index="/logs_info"  v-if="user.role=='超级管理员'">
+          </el-menu-item> -->
+          <el-menu-item index="/logs_info"  v-if="user.role!='普通员工'">
             <template slot="title" ><i class="el-icon-finished"></i>系统日志</template>
           </el-menu-item>
         </el-menu>
@@ -59,7 +59,7 @@
               <el-dropdown-item @click.native="$router.push('/newPassword')">修改密码</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <span style="font-size: 15px">{{user.username}}</span>
+          <span style="font-size: 15px ;">{{user.username}}</span>
         </el-header>
 
         <el-main>
@@ -94,15 +94,58 @@
 </script>
 
 <style scoped>
-.el-header {
-  background-color: #B3C0D1;
+/* .el-header {
+  background-color: #9bb3ddc1;
   color: #333;
   line-height: 60px;
 }
 
 .el-aside {
-  color: #333;
+  color: white;
   text-align: left;
+  background-color:#546e9cc1;
+}
+.el-menu{
+  background-color:#546e9cc1;
 }
  
+.el-menu-item{
+  color: white;
+  background-color:#546e9cc1;
+  width: 200px;
+}
+ ::v-deep .el-submenu__title{
+  color: white;
+  background-color:#546e9cc1;
+  width: 200px;
+} */
+ .el-header {
+  background-color: #9bb3ddc1;
+  color: #333;
+  line-height: 60px;
+}
+
+ ::v-deep .el-aside {
+  color: white;
+  text-align: left;
+  background-color: #546e9c;
+}
+
+::v-deep .el-menu,
+::v-deep .el-menu-item,
+::v-deep .el-submenu__title {
+  color: white;
+  background-color: #546e9c;
+  width: 200px;
+}
+
+::v-deep .el-menu-item:hover,
+::v-deep .el-submenu__title:hover {
+  background-color: #4a5e88;
+}
+
+::v-deep .el-menu-item.is-active {
+  background-color: #3a4d6e;
+}
+
 </style>

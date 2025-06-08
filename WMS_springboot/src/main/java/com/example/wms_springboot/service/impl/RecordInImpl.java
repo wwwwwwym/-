@@ -64,4 +64,12 @@ public class RecordInImpl extends ServiceImpl<RecordInDao, recordIn> implements 
     }
 
 
+    public List<recordIn> findNotice(){
+        User currentUser = TokenUtils.getCurrentUser();
+        return recordIndao.selectList(new QueryWrapper<recordIn>()
+                .eq("apply_id",currentUser.getUserid()).ne("state","待审核")
+                .orderByDesc("review_time").last("limit 0,6"));
+    }
+
+
 }

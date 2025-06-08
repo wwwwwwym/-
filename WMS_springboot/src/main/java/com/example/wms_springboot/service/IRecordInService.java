@@ -17,4 +17,5 @@ public interface IRecordInService extends IService<recordIn> {
     List<recordIn> findMyRecordCompleted();
 
     List<recordIn> findMyRecordRejected();
+    List<recordIn> findNotice();
 }

@@ -8,6 +8,7 @@ import com.example.wms_springboot.dao.UserDao;
 import com.example.wms_springboot.entity.User;
 import com.example.wms_springboot.exception.CustomException;
 import com.example.wms_springboot.service.IUserService;
+import com.example.wms_springboot.utils.MD5;
 import com.example.wms_springboot.utils.ResultCode;
 import com.example.wms_springboot.utils.TokenUtils;
 import org.apache.ibatis.jdbc.Null;
@@ -48,13 +49,13 @@ public class UserImpl extends ServiceImpl<UserDao,User> implements IUserService 
         Integer userId = user.getUserid();
 
         User dbUser = selectById(userId);
+        String newPass = new MD5().getMD5ofStr(user.getPassword());
+        user.setPassword(newPass);
         if (ObjectUtil.isNotEmpty(dbUser))//用户已存在抛出异常
         {
             throw new CustomException(ResultCode.USER_EXIST_ERROR);
         } else {//把注册信息写到表里
-            System.out.println("Received userid: " + user.getUserid());
             save(user);
-
         }
         return user;
     }
@@ -67,17 +68,20 @@ public class UserImpl extends ServiceImpl<UserDao,User> implements IUserService 
         Integer userid = user.getUserid();
         String password = user.getPassword();
         User dbUser = selectById(userid);
-        String dbPassword = dbUser.getPassword();
         if (ObjectUtil.isEmpty(dbUser))//用户不存在抛出异常
         {
             throw new CustomException(ResultCode.USER_NOT_EXITS_ERROR);
-        } else if (ObjectUtil.notEqual(password, dbPassword)) {//账号或密码错误
+        }
+        String dbPassword = dbUser.getPassword();
+        if (ObjectUtil.notEqual(password, dbPassword)) {//账号或密码错误
             throw new CustomException(ResultCode.USER_ACCOUNT_ERROE);
         }
 
         //生成token
         String token = TokenUtils.createToken(dbUser.getUserid().toString(), dbUser.getPassword());
         dbUser.setToken(token);
+        String newPass = new MD5().getMD5ofStr(user.getPassword());
+        dbUser.setPassword(newPass);
         return dbUser;
     }
 /**

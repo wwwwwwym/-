@@ -49,7 +49,7 @@
     <el-table-column prop="pname" label="产品名称" > </el-table-column>
     <el-table-column label="产品图片" > 
       <template v-slot="scope">
-        <el-image style="width: 80px; height: 80px" v-if="scope.row.picture" :src="scope.row.picture" :preview-src-list="[scope.row.picture]"></el-image>
+        <el-image style="width: 80px; height: 80px" v-if="scope.row.pictures" :src="scope.row.pictures" :preview-src-list="[scope.row.pictures]"></el-image>
       </template>
     </el-table-column>
     <el-table-column prop="deposity" label="现存仓库" width="90"> </el-table-column>
@@ -80,15 +80,18 @@
 
 <!-- 新增弹出框 -->
 <el-dialog title="新增产品" :visible.sync="addFormVisible" width="30%">
-    <el-form :model="form" :rules="rules" label-width="80px" style="padding:20px" ref="form" >
-        <el-form-item label="现存仓库" prop="deposity">
-            <el-input placeholder="请输入现存仓库" v-model="form.deposity" ></el-input>
-        </el-form-item>
+    <el-form :model="form" :rules="rules" label-width="100px" style="padding:20px" ref="form" >
         <el-form-item label="产品名称" prop="pname">
             <el-input placeholder="请输入产品名" v-model="form.pname" ></el-input>
         </el-form-item>
+        <el-form-item label="现存仓库" prop="deposity">
+            <el-input placeholder="请输入现存仓库" v-model="form.deposity" ></el-input>
+        </el-form-item>
         <el-form-item label="数量" prop="quantity">
             <el-input placeholder="请输入产品库存数量" v-model.number="form.quantity" type="number" min="0"></el-input>
+        </el-form-item>
+        <el-form-item label="库存预警值" prop="threshold">
+            <el-input placeholder="请输入库存预警值" v-model.number="form.threshold" type="number" min="0"></el-input>
         </el-form-item>
         <el-form-item label="价格" prop="price">
             <el-input placeholder="请输入产品单价" v-model.number="form.price" ></el-input>
@@ -98,7 +101,7 @@
             class="picture-uploader"
             action="http://localhost:9000/file/upload"
             :headers="{ token:user.token }"
-            :file-list="form.picture ? [form.picture] : []"
+            :file-list="form.pictures ? [form.pictures] : []"
             list-type="picture"
             :on-success="handleAvatarSuccess">
             <el-button type="primary">上传图片</el-button>
@@ -113,7 +116,7 @@
 
 <!-- 编辑弹出框 -->
 <el-dialog title="编辑信息" :visible.sync="editFormVisible" width="30%">
-    <el-form :model="form" :rules="rules" label-width="80px" style="padding:20px" ref="form" >
+    <el-form :model="form" :rules="rules" label-width="100px" style="padding:20px" ref="form" >
       <div style="margin:25px ;text-align:center">
         <el-upload
           class="avatar-uploader"
@@ -121,7 +124,7 @@
           :headers="{ token:user.token }"
           :show-file-list="false"
           :on-success="handleAvatarSuccess">
-          <img v-if="form.picture" :src="form.picture" class="avatar">
+          <img v-if="form.pictures" :src="form.pictures" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </div>
@@ -133,6 +136,9 @@
         </el-form-item>
         <el-form-item label="数量" prop="quantity">
             <el-input placeholder="请输入产品库存数量" v-model="form.quantity"></el-input>
+        </el-form-item>
+        <el-form-item label="库存预警值" prop="threshold">
+            <el-input placeholder="请输入库存预警值" v-model="form.threshold"></el-input>
         </el-form-item>
         <el-form-item label="价格" prop="price">
             <el-input placeholder="请输入产品单价" v-model="form.price" ></el-input>
@@ -173,7 +179,9 @@ import request from '@/request/request'
           pname: '',
           quantity: '',
           price: '',
-          picture: '',
+          pictures: '',
+          threshold: '',
+ 
         },
         editFormVisible:false,
         addFormVisible:false,
@@ -185,6 +193,19 @@ import request from '@/request/request'
         ],
           quantity:[
             { required: true, message: '请输入产品数量', trigger: 'blur' },
+            { validator: (rule, value, callback) => {
+                if (typeof value !== 'number' || isNaN(value)) {
+                    callback(new Error('必须输入数字'));
+                } else if (value < 0) {
+                    callback(new Error('数量不能为负数'));
+                } else {
+                    callback();
+                }
+              },
+            trigger: ['blur'] }
+          ],
+          threshold:[
+            { required: true, message: '请输入库存预警值', trigger: 'blur' },
             { validator: (rule, value, callback) => {
                 if (typeof value !== 'number' || isNaN(value)) {
                     callback(new Error('必须输入数字'));
@@ -222,7 +243,7 @@ import request from '@/request/request'
     },
     methods: {
       handleAvatarSuccess(response){
-        this.form.picture = response.data
+        this.form.pictures = response.data
         console.log(response.data)
       },
         delBatch(){

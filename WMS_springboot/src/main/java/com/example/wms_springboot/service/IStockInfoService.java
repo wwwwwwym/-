@@ -13,5 +13,5 @@ public interface IStockInfoService extends IService<stockInfo> {
 //    stockInfo findByStockid(Integer stockid);
     stockInfo findByOld(String pname,String deposityOld);
     stockInfo findByNew(String pname,String deposityNew);
-
+    List<stockInfo> findStock();
 }

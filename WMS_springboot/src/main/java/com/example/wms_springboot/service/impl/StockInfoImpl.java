@@ -32,5 +32,8 @@ public class StockInfoImpl extends ServiceImpl<StockInfoDao, stockInfo> implemen
         queryWrapper.eq("pname",pname).eq("deposity",deposityNew);
         return getOne(queryWrapper);
     }
+    public List<stockInfo> findStock(){
+        return stockInfoDao.selectList(new QueryWrapper<stockInfo>().apply("quantity < threshold"));
+    }
 }
 

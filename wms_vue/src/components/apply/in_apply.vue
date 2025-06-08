@@ -1,5 +1,5 @@
 <template>
- <div style="margin-top: 30px;">
+ <div style="margin-top: 20px;">
 
 <el-steps :active="active" finish-status="success" align-center>
   <el-step title="申请提交"></el-step>
@@ -10,7 +10,7 @@
 <!-- 表单区域 -->
 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" size="small" style="width:600px">
   <el-form-item label="产品名称" prop="pname">
-    <el-input v-model="ruleForm.pname"></el-input>
+    <el-input v-model="ruleForm.pname" ></el-input>
   </el-form-item>
   <el-form-item label="产品图片" prop="picture" style="text-align:left"> 
           <el-upload
@@ -23,6 +23,13 @@
             <el-button type="primary">上传图片</el-button>
           </el-upload>
   </el-form-item>
+  <el-form-item label="操作类型" prop="type">
+    <el-radio-group v-model="ruleForm.type">
+      <el-radio label="出货单"></el-radio>
+      <el-radio label="进货单"></el-radio>
+      <el-radio label="调货单"></el-radio>
+    </el-radio-group>
+  </el-form-item>
   <!-- <el-form-item label="产品编号" prop="stockid">
     <el-input v-model="ruleForm.stockid"></el-input>
   </el-form-item> -->
@@ -32,26 +39,20 @@
   <el-form-item label="产品价格" prop="price">
     <el-input v-model.number="ruleForm.price" ></el-input>
   </el-form-item>
-  <el-form-item label="操作类型" prop="type">
-    <el-radio-group v-model="ruleForm.type">
-      <el-radio label="出货单"></el-radio>
-      <el-radio label="进货单"></el-radio>
-      <el-radio label="调货单"></el-radio>
-    </el-radio-group>
-  </el-form-item>
-  <el-form-item label="原仓库" prop="deposityOld" >
-    <el-select v-model="ruleForm.deposityOld" placeholder="请选择仓库名称" clearable>
-      <el-option v-for="item in ['1号仓库','2号仓库','3号仓库']" :key="item" :label="item" :value="item"></el-option>
+  
+  <el-form-item label="出货仓库" prop="deposityOld" >
+    <el-select v-model="ruleForm.deposityOld" placeholder="请选择出货仓库名称" clearable>
+      <el-option v-for="item in ['无','1号仓库','2号仓库','3号仓库','4号仓库','5号仓库']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
-  <el-form-item label="现仓库" prop="deposityNew">
-    <el-select v-model="ruleForm.deposityNew" placeholder="请选择仓库名称" clearable>
-      <el-option v-for="item in ['1号仓库','2号仓库','3号仓库']" :key="item" :label="item" :value="item"></el-option>
+  <el-form-item label="进货仓库" prop="deposityNew">
+    <el-select v-model="ruleForm.deposityNew" placeholder="请选择进货仓库名称" clearable>
+      <el-option v-for="item in ['无','1号仓库','2号仓库','3号仓库','4号仓库','5号仓库']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
     <el-form-item label="审核人" prop="reviewId">
     <el-select v-model="ruleForm.reviewId" placeholder="请选择审核人">
-      <el-option v-for="item in ['2001','7933','333']" :key="item" :label="item" :value="item"></el-option>
+      <el-option v-for="item in ['2001','2002','2003','7933']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="申请备注" >
@@ -137,8 +138,14 @@
           reviewId: [ 
             { required: true, message: '请选择审核人', trigger: 'change' }
           ],
+          deposityOld: [ 
+            { required: true, message: '请选择出货仓库', trigger: 'change' }
+          ],
+          deposityNew: [ 
+            { required: true, message: '请选择进货仓库', trigger: 'change' }
+          ],
+        
         }
-
        }
     },
     components: {
@@ -190,7 +197,7 @@
 .demo-ruleForm{
     margin: 0 auto;        /* 水平居中 */
     padding: 20px;
-    margin-top:50px
+    margin-top:40px
 }
 
 .el-form-item {

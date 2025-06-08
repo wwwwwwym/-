@@ -107,6 +107,15 @@ public class RecordInController {
         return ResponseResult.success(all);
     }
 
+
+    //公告展示近3条通知
+    @GetMapping("/notice")
+    public ResponseResult notice(){
+
+        List <recordIn> all=recordInService.findNotice();
+        return ResponseResult.success(all);
+    }
+
     /**
      * 修改
      */
@@ -223,28 +232,39 @@ public class RecordInController {
 
 
 
-    /**
-     * 统计图数据
-     */
-    @GetMapping("/charts")
-    public ResponseResult charts(){
-        //包装折线图的数据
-        List<recordIn> list = recordInService.list();//数据多要换一种方法
-        Set<String> dates = list.stream().map(recordIn::getApplyTime).collect(Collectors.toSet());//set是无序的,用list排序
-        List<String> dateList = CollUtil.newArrayList(dates);
-        dateList.sort(Comparator.naturalOrder());
-        List<Dict> linelist = new ArrayList<>();
-        for (String date :dateList){
-            //统计当日所有金额总数
-            BigDecimal sum = list.stream().filter(recordIn -> recordIn.getApplyTime().equals(date)&&
-                            "已完成".equals(recordIn.getState()))
-                    .map(recordIn::getPrice).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
-            Dict dict =Dict.create();
-            Dict line = dict.set("date", date).set("value", sum);
-            linelist.add(line);
-        }
-        return ResponseResult.success(linelist);
-    }
+//    /**
+//     * 统计图数据
+//     */
+//    @GetMapping("/charts")
+//    public ResponseResult charts(){
+//        //包装折线图的数据
+//        List<recordIn> list = recordInService.list();//数据多要换一种方法
+//        Set<String> dates = list.stream().map(recordIn::getApplyTime).collect(Collectors.toSet());//set是无序的,用list排序
+//        List<String> dateList = CollUtil.newArrayList(dates);
+//        dateList.sort(Comparator.naturalOrder());
+//        Set<String>deposityOlds =list.stream().map(recordIn::getDeposityOld).collect(Collectors.toSet());
+//        System.out.println("deposityOlds = " + deposityOlds);
+//        List<Dict> linelist = new ArrayList<>();
+//        for (String date :dateList){
+//            Dict dict =Dict.create();
+//            Dict line = dict.set("date", date);
+//            for (String deposityOld :deposityOlds){
+//                System.out.println("deposityOld = " + deposityOld);
+//                //统计当日所有金额总数
+//                BigDecimal sum = list.stream().filter(recordIn -> recordIn.getApplyTime().equals(date)&&
+//                                "已完成".equals(recordIn.getState()) && recordIn.getDeposityOld().equals(deposityOld))
+//                        .map(recordIn::getPrice).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+//                line =line.set("deposityOld", deposityOld);
+//                linelist.add(line);
+//                System.out.println("linelist = " + linelist);
+//            }
+//
+//        }
+//
+//        return ResponseResult.success(linelist);
+//    }
+
+
 
 
     /**
@@ -262,6 +282,7 @@ public class RecordInController {
             System.out.println(record.getDeposityOld()+record.getPname());
             result=stockInfoService.findByOld(record.getPname(),record.getDeposityOld());
             result.setQuantity(result.getQuantity()-record.getQuantity());
+            result.setStocktime(DateUtil.today());
             return ResponseResult.success(stockInfoService.updateById(result));
         }
         else if(record.getType().equals("进货单"))
@@ -274,13 +295,13 @@ public class RecordInController {
                 result = new stockInfo();
                 result.setDeposity(record.getDeposityNew());
                 result.setPname(record.getPname());
-                result.setStocktime(DateUtil.today());
                 result.setQuantity(0);
                 result.setPrice(record.getPrice());
-                result.setPicture(record.getPicture());
                 stockInfoService.save(result);
             }
             result.setQuantity(result.getQuantity()+record.getQuantity());
+            result.setPrice(record.getPrice());
+            result.setStocktime(DateUtil.today());
             return ResponseResult.success(stockInfoService.updateById(result));
         }
 //        if(record.getType().equals("调货单"))
@@ -294,14 +315,16 @@ public class RecordInController {
                 New = new stockInfo();
                 New.setDeposity(record.getDeposityNew());
                 New.setPname(record.getPname());
-                New.setStocktime(DateUtil.today());
+
                 New.setQuantity(0);
                 New.setPrice(record.getPrice());
                 stockInfoService.save(New);
             }
             Old.setQuantity(Old.getQuantity()-record.getQuantity());
+            Old.setStocktime(DateUtil.today());
             New.setQuantity(New.getQuantity()+record.getQuantity());
             stockInfoService.updateById(Old);
+            New.setStocktime(DateUtil.today());
             return ResponseResult.success(stockInfoService.updateById(New));
         }
 

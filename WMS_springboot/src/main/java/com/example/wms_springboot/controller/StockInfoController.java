@@ -189,5 +189,10 @@ public class StockInfoController {
         return ResponseResult.success(linelist);
 
     }
+    @GetMapping("/stockalert")
+    public ResponseResult stockalert(){
+        List <stockInfo> alerts=stockInfoService.findStock();
+        return ResponseResult.success(alerts);
+    }
 
 }

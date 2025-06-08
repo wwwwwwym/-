@@ -4,7 +4,7 @@
   <div style="margin-top:20px; margin-bottom: 30px; display:flex;">
       <el-input v-model="operation" placeholder="请输入操作模块" style="width:20%; margin-left: 10px"></el-input>
       <el-select v-model="type" placeholder="请选择操作类型" style="width:20%; margin-left: 10px">
-        <el-option v-for="item in ['新增','修改','删除','注册','登录','批量删除']" :key="item" :label="item" :value="item"></el-option>
+        <el-option v-for="item in ['新增','修改','删除','注册','登录','批量删除','批量导入','批量导出','申请提交','申请通过','申请驳回',]" :key="item" :label="item" :value="item"></el-option>
       </el-select>
       <el-input v-model="OptUser" placeholder="请输入操作人" style="width:20%; margin-left: 10px"></el-input>
       <el-button type="primary" style="margin-left: 40px" @click="load(1)"><i class="el-icon-search"></i> 查询</el-button>

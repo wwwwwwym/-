@@ -277,7 +277,7 @@ import request from '@/request/request'
           {
             this.$message.success("申请已驳回");
             console.log("当前卡片的数据2：", this.ruleForm);
-            this.rejectedFormVisible=false
+            this.pendingFormVisible=false
             this.loadpendings();
             this.loadcompleteds();
             this.loadrejecteds();

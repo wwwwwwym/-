@@ -1,6 +1,6 @@
 <template>
- <div >
-    <el-card style="width:50%">
+ <div sS>
+    <el-card style="width:50%;">
         <el-form :model="user" :rules="rules" label-width="80px" style="padding-right:20px" ref="form" >
             <el-form-item label="用户名" prop="username">
                 <el-input placeholder="请输入用户名" v-model="user.username" ></el-input>
@@ -21,7 +21,7 @@
                 <el-input  v-model="formattedTime" disabled></el-input>
             </el-form-item>
             <!-- <el-form-item label="负责仓库" prop="deposity">
-                <el-input placeholder="请输入仓库名" v-model="user.deposity" ></el-input>
+                <el-input placeholder="请输入仓库名" v-model="user.depositSy" ></el-input>
             </el-form-item> -->
             <!-- <el-form-item label="负责仓库" prop="deposity">
                 <el-input  v-model="user.deposity" disabled></el-input>
