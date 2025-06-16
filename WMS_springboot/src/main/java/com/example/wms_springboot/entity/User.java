@@ -33,6 +33,9 @@ public class User {
     private String time;//入职时间
     @Alias("用户电话")
     private String telephone;//员工电话
+    @Alias("是否注册")
+    private Boolean isregister;//员工电话
+
 
 
     @TableField(exist = false)

@@ -16,10 +16,7 @@ import com.example.wms_springboot.config.Logs;
 import com.example.wms_springboot.entity.User;
 import com.example.wms_springboot.exception.CustomException;
 import com.example.wms_springboot.service.IUserService;
-import com.example.wms_springboot.utils.ResponseResult;
-import com.example.wms_springboot.utils.ResultCode;
-import com.example.wms_springboot.utils.TokenUtils;
-import com.example.wms_springboot.utils.logType;
+import com.example.wms_springboot.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -89,6 +86,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseResult userLogin(@RequestBody User user)
     {
+        System.out.println("user = " + user);
         return ResponseResult.success(userService.userLogin(user));
     }
 
@@ -99,6 +97,8 @@ public class UserController {
     @PutMapping("/update")
     public ResponseResult updateUser(@RequestBody User user)
     {
+        String newPass = new MD5().getMD5ofStr(user.getPassword());
+        user.setPassword(newPass);
         return ResponseResult.success(userService.updateById(user));
     }
     /**

@@ -119,24 +119,6 @@ import request from '@/request/request';
           ],
         },
 
-        options: [{
-          value: '选项1',
-          label: '仓库1'
-        }, {
-          value: '选项2',
-          label: '仓库2'
-        }, {
-          value: '选项3',
-          label: '仓库3'
-        }, {
-          value: '选项4',
-          label: '仓库4'
-        }, {
-          value: '选项5',
-          label: '仓库5'
-        }],
-        // value: '',
-
        };
     },
     components: {

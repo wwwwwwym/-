@@ -47,15 +47,17 @@ public class UserImpl extends ServiceImpl<UserDao,User> implements IUserService 
     public User userRegister(User user) {
         //用户名校验
         Integer userId = user.getUserid();
-
         User dbUser = selectById(userId);
         String newPass = new MD5().getMD5ofStr(user.getPassword());
-        user.setPassword(newPass);
-        if (ObjectUtil.isNotEmpty(dbUser))//用户已存在抛出异常
+        if(dbUser==null){
+            throw new CustomException(ResultCode.ID_ERROR);
+        }
+        if (dbUser.getIsregister())//用户已注册抛出异常
         {
             throw new CustomException(ResultCode.USER_EXIST_ERROR);
         } else {//把注册信息写到表里
-            save(user);
+            user.setPassword(newPass);
+            user.setIsregister(true);
         }
         return user;
     }
@@ -66,22 +68,22 @@ public class UserImpl extends ServiceImpl<UserDao,User> implements IUserService 
     public User userLogin(User user) {
         //用户校验,密码账号对应
         Integer userid = user.getUserid();
-        String password = user.getPassword();
+//        String password = user.getPassword();
         User dbUser = selectById(userid);
-        if (ObjectUtil.isEmpty(dbUser))//用户不存在抛出异常
+        if (!dbUser.getIsregister())//用户未注册抛出异常
         {
             throw new CustomException(ResultCode.USER_NOT_EXITS_ERROR);
         }
+        String newPass = new MD5().getMD5ofStr(user.getPassword());
         String dbPassword = dbUser.getPassword();
-        if (ObjectUtil.notEqual(password, dbPassword)) {//账号或密码错误
+        if (ObjectUtil.notEqual(dbPassword, newPass)) {//账号或密码错误
             throw new CustomException(ResultCode.USER_ACCOUNT_ERROE);
         }
 
         //生成token
         String token = TokenUtils.createToken(dbUser.getUserid().toString(), dbUser.getPassword());
         dbUser.setToken(token);
-        String newPass = new MD5().getMD5ofStr(user.getPassword());
-        dbUser.setPassword(newPass);
+
         return dbUser;
     }
 /**
@@ -102,7 +104,8 @@ public class UserImpl extends ServiceImpl<UserDao,User> implements IUserService 
         {
             throw new CustomException(ResultCode.CHECK_ERROR);
         }//电话不匹配
-        dbUser.setPassword("123456");
+        String newPass = new MD5().getMD5ofStr("123456");
+        dbUser.setPassword(newPass);
         updateById(dbUser);
         return null;
 

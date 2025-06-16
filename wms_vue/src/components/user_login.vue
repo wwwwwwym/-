@@ -26,11 +26,11 @@
   </div>
 
   <el-dialog title="忘记密码" :visible.sync="forgetPassDialog" width="30%">
-  <el-form :model="forgetUserForm" label-width="80px" style="padding-right:20px">
-    <el-form-item label="用户工号" >
+  <el-form :model="forgetUserForm" :rules="rules" ref="forgetUserForm"  label-width="80px" style="padding-right:20px">
+    <el-form-item label="用户工号" prop="userid" >
       <el-input v-model="forgetUserForm.userid" autocomplete="off" placeholder="请输入工号"></el-input>
     </el-form-item>
-    <el-form-item label="手机号" >
+    <el-form-item label="手机号" prop="telephone">
       <el-input v-model="forgetUserForm.telephone" autocomplete="off" placeholder="请输入手机号"></el-input>
     </el-form-item>
   </el-form>
@@ -75,7 +75,10 @@ import request from '@/request/request'
       };
 
        return {
-        forgetUserForm:{},//忘记密码表单数据
+        forgetUserForm:{
+          userid:'',
+          telephone:''
+        },//忘记密码表单数据
         forgetPassDialog:false,
         ruleForm: {
           password: '',
@@ -87,6 +90,10 @@ import request from '@/request/request'
           ],
           userid: [
             { validator: checkId, trigger: 'change' }
+          ],
+          telephone: [
+            { required: true, message: '请输入电话号码', trigger: 'change' },
+            { min: 11, max: 11, message: '长度为11个字符', trigger: 'change' }
           ],
         }
        };
@@ -102,6 +109,8 @@ import request from '@/request/request'
       },
 
       resetPassword(){
+        this.$refs["forgetUserForm"].validate((valid) => {
+        if(valid){
         this.$request.put("/user/forgetPass",this.forgetUserForm).then(res=>{
           if(res.code==0){
             this.$message.success("已重置为初始密码");
@@ -109,6 +118,8 @@ import request from '@/request/request'
           }else{
             this.$message.error(res.msg);
           }
+        })
+        }
         })
       },
       login(){

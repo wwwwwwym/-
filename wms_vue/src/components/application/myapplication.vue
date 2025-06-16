@@ -92,12 +92,12 @@
   </el-form-item>
   <el-form-item label="原仓库" prop="deposityOld">
     <el-select v-model="ruleForm.deposityOld" placeholder="请选择仓库名称" style="width:100%" clearable>
-      <el-option v-for="item in ['1号仓库','2号仓库','3号仓库']" :key="item" :label="item" :value="item"></el-option>
+      <el-option v-for="item in ['1号仓库','2号仓库','3号仓库','4号仓库','5号仓库']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="新仓库" prop="deposityNew">
     <el-select v-model="ruleForm.deposityNew" placeholder="请选择仓库名称" style="width:100%" clearable>
-      <el-option v-for="item in ['1号仓库','2号仓库','3号仓库']" :key="item" :label="item" :value="item"></el-option>
+      <el-option v-for="item in ['1号仓库','2号仓库','3号仓库','4号仓库','5号仓库']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="操作类型" prop="type">
@@ -109,7 +109,7 @@
   </el-form-item>
     <el-form-item label="审核人" prop="reviewId">
     <el-select v-model="ruleForm.reviewId" placeholder="请选择审核人" style="width:100%">
-      <el-option v-for="item in ['111','222','333']" :key="item" :label="item" :value="item"></el-option>
+      <el-option v-for="item in ['2001','2002','2003','7933']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="申请备注" >
@@ -141,12 +141,12 @@
   </el-form-item>
   <el-form-item label="原仓库" prop="deposityOld">
     <el-select v-model="ruleForm.deposityOld" style="width:100%" disabled>
-      <el-option v-for="item in ['1号仓库','2号仓库','3号仓库']" :key="item" :label="item" :value="item"></el-option>
+      <el-option v-for="item in ['1号仓库','2号仓库','3号仓库','4号仓库','5号仓库']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="新仓库">
     <el-select v-model="ruleForm.deposityNew" style="width:100%" disabled>
-      <el-option v-for="item in ['1号仓库','2号仓库','3号仓库']" :key="item" :label="item" :value="item"></el-option>
+      <el-option v-for="item in ['1号仓库','2号仓库','3号仓库','4号仓库','5号仓库']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="操作类型">
@@ -158,7 +158,7 @@
   </el-form-item>
     <el-form-item label="审核人">
     <el-select v-model="ruleForm.reviewId" placeholder="请选择审核人" style="width:100%" disabled>
-      <el-option v-for="item in ['111','222','333']" :key="item" :label="item" :value="item"></el-option>
+      <el-option v-for="item in ['2001','2002','2003','7933']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="申请备注" >
@@ -191,12 +191,12 @@
   </el-form-item>
   <el-form-item label="原仓库" prop="deposityOld">
     <el-select v-model="ruleForm.deposityOld" style="width:100%" disabled>
-      <el-option v-for="item in ['1号仓库','2号仓库','3号仓库']" :key="item" :label="item" :value="item"></el-option>
+      <el-option v-for="item in ['1号仓库','2号仓库','3号仓库','4号仓库','5号仓库']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="新仓库">
     <el-select v-model="ruleForm.deposityNew" style="width:100%" disabled>
-      <el-option v-for="item in ['1号仓库','2号仓库','3号仓库']" :key="item" :label="item" :value="item"></el-option>
+      <el-option v-for="item in ['1号仓库','2号仓库','3号仓库','4号仓库','5号仓库']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="操作类型">
@@ -208,7 +208,7 @@
   </el-form-item>
     <el-form-item label="审核人">
     <el-select v-model="ruleForm.reviewId" placeholder="请选择审核人" style="width:100%" disabled>
-      <el-option v-for="item in ['111','222','333']" :key="item" :label="item" :value="item"></el-option>
+      <el-option v-for="item in ['2001','2002','2003','7933']" :key="item" :label="item" :value="item"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="申请备注" >

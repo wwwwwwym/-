@@ -56,7 +56,7 @@
             { required: true,validator: validatePass, trigger: 'blur' }
           ],
           checkPassword: [
-            { required: true,validator: validatePass2, trigger: 'blur' }
+            { required: true,validator: validatePass2, trigger: 'change' }
           ],
         },
 
